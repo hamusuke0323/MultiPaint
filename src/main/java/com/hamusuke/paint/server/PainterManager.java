@@ -1,11 +1,13 @@
 package com.hamusuke.paint.server;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.hamusuke.paint.network.Painter;
 import com.hamusuke.paint.network.channel.Connection;
 import com.hamusuke.paint.network.protocol.packet.Packet;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.ChatS2CPacket;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.JoinPainterS2CPacket;
+import com.hamusuke.paint.network.protocol.packet.s2c.main.lobby.JoinCanvasS2CPacket;
 import com.hamusuke.paint.server.network.ServerPainter;
 import com.hamusuke.paint.server.network.main.ServerLobbyPacketListenerImpl;
 import io.netty.util.concurrent.Future;
@@ -34,6 +36,7 @@ public class PainterManager {
 
         synchronized (this.painters) {
             this.painters.forEach(serverPainter1 -> listener.connection.sendPacket(new JoinPainterS2CPacket(serverPainter1, true)));
+            this.painters.stream().filter(Painter::isInAnyCanvas).forEach(serverPainter1 -> listener.connection.sendPacket(new JoinCanvasS2CPacket(serverPainter1, serverPainter1.getCurrentCanvas().getInfo())));
             this.painters.add(serverPainter);
         }
     }
@@ -74,5 +77,9 @@ public class PainterManager {
         }
 
         this.sendPacketToAll(new ChatS2CPacket(String.format("Painter[%s] left the server", painter.connection.getConnection().getAddress())));
+    }
+
+    public ImmutableList<ServerPainter> getPainters() {
+        return ImmutableList.copyOf(this.painters);
     }
 }

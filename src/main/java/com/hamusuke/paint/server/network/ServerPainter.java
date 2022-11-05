@@ -33,10 +33,6 @@ public class ServerPainter extends Painter {
         return (ServerCanvas) this.currentCanvas;
     }
 
-    public void setCurrentCanvas(ServerCanvas currentCanvas) {
-        this.currentCanvas = currentCanvas;
-    }
-
     public void sendPacket(Packet<?> packet) {
         this.sendPacket(packet, null);
     }

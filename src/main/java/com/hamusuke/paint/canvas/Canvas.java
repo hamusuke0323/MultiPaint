@@ -15,7 +15,7 @@ public abstract class Canvas {
     protected final CanvasInfo info;
 
     protected Canvas(UUID uuid, String title, UUID author, int width, int height) {
-        this.info = new CanvasInfo(this.canvasId, uuid, title, author);
+        this.info = new CanvasInfo(this.canvasId, uuid, title, author, width, height);
         this.data = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         this.graphics2D = this.getData().createGraphics();
         this.graphics2D.setColor(Color.WHITE);
@@ -32,6 +32,8 @@ public abstract class Canvas {
         Image prev = this.getData().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         BufferedImage newData = new BufferedImage(width, height, this.getData().getType());
         this.data = newData;
+        this.info.setWidth(width);
+        this.info.setHeight(height);
         this.graphics2D = newData.createGraphics();
         this.graphics2D.setColor(Color.WHITE);
         this.graphics2D.fillRect(0, 0, width, height);

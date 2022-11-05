@@ -12,12 +12,16 @@ public class CanvasInfo implements Serializable {
     private final UUID canvasUUID;
     private final String title;
     private final UUID author;
+    private int width;
+    private int height;
 
-    public CanvasInfo(int canvasId, UUID canvasUUID, String title, UUID author) {
+    public CanvasInfo(int canvasId, UUID canvasUUID, String title, UUID author, int width, int height) {
         this.canvasId = canvasId;
         this.canvasUUID = canvasUUID;
         this.title = title;
         this.author = author;
+        this.width = width;
+        this.height = height;
     }
 
     public CanvasInfo(IntelligentByteBuf byteBuf) {
@@ -25,6 +29,8 @@ public class CanvasInfo implements Serializable {
         this.canvasUUID = byteBuf.readUUID();
         this.title = byteBuf.readString();
         this.author = byteBuf.readUUID();
+        this.width = byteBuf.readVariableInt();
+        this.height = byteBuf.readVariableInt();
     }
 
     public void pack(IntelligentByteBuf byteBuf) {
@@ -32,6 +38,8 @@ public class CanvasInfo implements Serializable {
         byteBuf.writeUUID(this.canvasUUID);
         byteBuf.writeString(this.title);
         byteBuf.writeUUID(this.author);
+        byteBuf.writeVariableInt(this.width);
+        byteBuf.writeVariableInt(this.height);
     }
 
     public int getCanvasId() {
@@ -54,6 +62,22 @@ public class CanvasInfo implements Serializable {
         return this.author;
     }
 
+    public int getWidth() {
+        return this.width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
     @Override
     public String toString() {
         return "CanvasInfo{" +
@@ -61,6 +85,8 @@ public class CanvasInfo implements Serializable {
                 ", canvasUUID=" + canvasUUID +
                 ", title='" + title + '\'' +
                 ", author=" + author +
+                ", width=" + width +
+                ", height=" + height +
                 '}';
     }
 
@@ -74,6 +100,6 @@ public class CanvasInfo implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(canvasId, canvasUUID, title, author);
+        return Objects.hash(canvasId);
     }
 }

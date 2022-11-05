@@ -7,7 +7,6 @@ import com.hamusuke.paint.network.channel.Connection;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.canvas.CanvasDataS2CPacket;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.canvas.LineS2CPacket;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.lobby.CanvasInfoResponseS2CPacket;
-import com.hamusuke.paint.network.protocol.packet.s2c.main.lobby.JoinCanvasS2CPacket;
 
 public class ClientCanvasPacketListenerImpl extends ClientCommonPacketListenerImpl {
     private final CanvasWindow canvasWindow;
@@ -37,11 +36,6 @@ public class ClientCanvasPacketListenerImpl extends ClientCommonPacketListenerIm
 
     @Override
     public void handleCanvasInfoResponse(CanvasInfoResponseS2CPacket packet) {
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public void handleJoinCanvas(JoinCanvasS2CPacket packet) {
         throw new IllegalStateException();
     }
 }

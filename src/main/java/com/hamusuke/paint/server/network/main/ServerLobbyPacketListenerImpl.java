@@ -31,7 +31,7 @@ public class ServerLobbyPacketListenerImpl extends ServerCommonPacketListenerImp
         if (canvas != null) {
             this.painter.joinCanvas(canvas);
             new ServerCanvasPacketListenerImpl(this.server, this.connection, this.painter, canvas);
-            this.connection.sendPacket(new JoinCanvasS2CPacket(canvas.getInfo(), canvas.getWidth(), canvas.getHeight()));
+            this.server.sendPacketToAll(new JoinCanvasS2CPacket(this.painter, canvas.getInfo()));
         } else {
             this.connection.sendPacket(new DisconnectS2CPacket(), future -> this.connection.disconnect());
         }

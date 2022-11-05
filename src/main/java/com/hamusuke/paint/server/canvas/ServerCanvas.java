@@ -47,7 +47,7 @@ public class ServerCanvas extends Canvas {
             }
 
             if (info != null && data != null) {
-                ServerCanvas serverCanvas = new ServerCanvas(saveDir, info.getCanvasUUID(), info.getTitle(), info.getAuthor(), data.getWidth(), data.getHeight());
+                ServerCanvas serverCanvas = new ServerCanvas(saveDir, info.getCanvasUUID(), info.getTitle(), info.getAuthor(), info.getWidth(), info.getHeight());
                 serverCanvas.setData(data);
                 return serverCanvas;
             }
@@ -69,6 +69,10 @@ public class ServerCanvas extends Canvas {
     }
 
     public synchronized void save() {
+        if (!this.saveDir.exists()) {
+            this.saveDir.mkdir();
+        }
+
         try (ObjectOutputStream stream = new ObjectOutputStream(Files.newOutputStream(new File(this.saveDir, "canvas.dat").toPath()))) {
             stream.writeObject(this.info);
             stream.flush();

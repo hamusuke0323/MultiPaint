@@ -157,6 +157,19 @@ public class PaintClient extends ReentrantThreadExecutor<Runnable> {
         }
     }
 
+    @Nullable
+    public ClientPainter getById(int id) {
+        synchronized (this.clientPainters) {
+            for (ClientPainter painter : this.clientPainters) {
+                if (painter.getId() == id) {
+                    return painter;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public void startIntegratedServer(Consumer<String> consumer) {
         this.server = PaintServer.startServer(thread -> new IntegratedServer(thread, this));
         while (!this.server.isLoading()) {
