@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.hamusuke.paint.Constants;
 import com.hamusuke.paint.server.PaintServer;
 import com.hamusuke.paint.util.Util;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -79,10 +80,10 @@ public class DedicatedPaintServer extends PaintServer {
     }
 
     private void runCommand(String command) {
-        switch (command) {
-            case "stop":
-                this.stop(false);
-                break;
+        try {
+            this.dispatcher.execute(command, this);
+        } catch (CommandSyntaxException e) {
+            LOGGER.info("Command Syntax Error!", e);
         }
     }
 }

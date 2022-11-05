@@ -26,7 +26,7 @@ public class ClientLobbyPacketListenerImpl extends ClientCommonPacketListenerImp
 
     @Override
     public void handleJoinCanvas(JoinCanvasS2CPacket packet) {
-        ClientCanvas canvas = new ClientCanvas(packet.getInfo().getTitle(), packet.getInfo().getAuthor(), packet.getWidth(), packet.getHeight());
+        ClientCanvas canvas = new ClientCanvas(packet.getInfo().getCanvasUUID(), packet.getInfo().getTitle(), packet.getInfo().getAuthor(), packet.getWidth(), packet.getHeight());
         canvas.setCanvasId(packet.getInfo().getCanvasId());
         this.client.joinCanvas(canvas);
         this.client.painterList = new CanvasPainterList(this.client);

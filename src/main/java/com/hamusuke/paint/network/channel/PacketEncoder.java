@@ -28,7 +28,7 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<?>> {
                 throw new IOException("Can't serialize unregistered packet: " + msg.getClass().getName());
             } else {
                 IntelligentByteBuf buf = new IntelligentByteBuf(out);
-                buf.writeVarInt(integer);
+                buf.writeVariableInt(integer);
                 int i = buf.writerIndex();
                 msg.write(buf);
                 int j = buf.writerIndex() - i;

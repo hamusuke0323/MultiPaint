@@ -12,12 +12,12 @@ public class LoginCompressionS2CPacket implements Packet<ClientLoginPacketListen
     }
 
     public LoginCompressionS2CPacket(IntelligentByteBuf byteBuf) {
-        this.threshold = byteBuf.readVarInt();
+        this.threshold = byteBuf.readVariableInt();
     }
 
     @Override
     public void write(IntelligentByteBuf byteBuf) {
-        byteBuf.writeVarInt(this.threshold);
+        byteBuf.writeVariableInt(this.threshold);
     }
 
     @Override

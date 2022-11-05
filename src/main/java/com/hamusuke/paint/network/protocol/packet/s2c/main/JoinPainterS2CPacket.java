@@ -20,14 +20,14 @@ public class JoinPainterS2CPacket implements Packet<ClientCommonPacketListener> 
 
     public JoinPainterS2CPacket(IntelligentByteBuf byteBuf) {
         this.uuid = byteBuf.readUUID();
-        this.id = byteBuf.readVarInt();
+        this.id = byteBuf.readVariableInt();
         this.others = byteBuf.readBoolean();
     }
 
     @Override
     public void write(IntelligentByteBuf byteBuf) {
         byteBuf.writeUUID(this.uuid);
-        byteBuf.writeVarInt(this.id);
+        byteBuf.writeVariableInt(this.id);
         byteBuf.writeBoolean(this.others);
     }
 

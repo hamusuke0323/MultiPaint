@@ -19,7 +19,7 @@ public class CanvasPainterList extends PainterList {
     public void update() {
         MODEL.setRowCount(0);
         synchronized (this.client.clientPainters) {
-            this.client.clientPainters.stream().filter(p -> this.client.clientPainter.isInAnyCanvas() && p.isInCanvas(this.client.getCurrentCanvas())).forEach(painter -> {
+            this.client.clientPainters.stream().filter(p -> p.isInCanvas(this.client.getCurrentCanvas())).forEach(painter -> {
                 MODEL.addRow(new Object[]{new Color(0, 0, 0), painter, painter.getPing() + "ms"});
             });
         }

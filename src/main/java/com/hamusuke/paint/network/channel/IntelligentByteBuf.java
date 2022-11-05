@@ -6,7 +6,6 @@ import io.netty.buffer.ByteBufAllocator;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import io.netty.util.ByteProcessor;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +17,9 @@ import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -29,18 +30,19 @@ public class IntelligentByteBuf extends ByteBuf {
         this.parent = parent;
     }
 
-    public <E> void writeList(Collection<E> list, BiConsumer<E, IntelligentByteBuf> writer) {
-        this.writeVarInt(list.size());
-        list.forEach(t -> writer.accept(t, this));
+    public static int getVariableIntSize(int value) {
+        for (int i = 1; i < 5; ++i) {
+            if ((value & -1 << i * 7) == 0) {
+                return i;
+            }
+        }
+
+        return 5;
     }
 
-    public <C extends Collection<E>, E> C readList(Function<IntelligentByteBuf, E> reader, Function<ArrayList<E>, C> listTransformer) {
-        int i = this.readVarInt();
-        ArrayList<E> c = Lists.newArrayListWithCapacity(i);
-        for (int j = 0; j < i; j++) {
-            c.add(reader.apply(this));
-        }
-        return listTransformer.apply(c);
+    public <E> void writeList(Collection<E> list, BiConsumer<E, IntelligentByteBuf> writer) {
+        this.writeVariableInt(list.size());
+        list.forEach(t -> writer.accept(t, this));
     }
 
     public void writeUUID(UUID uuid) {
@@ -52,17 +54,16 @@ public class IntelligentByteBuf extends ByteBuf {
         return new UUID(this.readLong(), this.readLong());
     }
 
-    public static int getVarIntSize(int value) {
-        for (int i = 1; i < 5; ++i) {
-            if ((value & -1 << i * 7) == 0) {
-                return i;
-            }
+    public <C extends Collection<E>, E> C readList(Function<IntelligentByteBuf, E> reader, Function<ArrayList<E>, C> listTransformer) {
+        int i = this.readVariableInt();
+        ArrayList<E> c = Lists.newArrayListWithCapacity(i);
+        for (int j = 0; j < i; j++) {
+            c.add(reader.apply(this));
         }
-
-        return 5;
+        return listTransformer.apply(c);
     }
 
-    public int readVarInt() {
+    public int readVariableInt() {
         int i = 0;
         int j = 0;
 
@@ -71,7 +72,7 @@ public class IntelligentByteBuf extends ByteBuf {
             b0 = this.readByte();
             i |= (b0 & 127) << j++ * 7;
             if (j > 5) {
-                throw new RuntimeException("VarInt too big");
+                throw new RuntimeException("Variable Int is too big");
             }
         } while ((b0 & 128) == 128);
 
@@ -83,12 +84,12 @@ public class IntelligentByteBuf extends ByteBuf {
     }
 
     public void writeByteArray(byte[] array) {
-        this.writeVarInt(array.length);
+        this.writeVariableInt(array.length);
         this.writeBytes(array);
     }
 
     public byte[] readByteArray(int maxSize) {
-        int i = this.readVarInt();
+        int i = this.readVariableInt();
         if (i > maxSize) {
             throw new DecoderException("ByteArray with size " + i + " is bigger than allowed " + maxSize);
         } else {
@@ -98,7 +99,7 @@ public class IntelligentByteBuf extends ByteBuf {
         }
     }
 
-    public void writeVarInt(int value) {
+    public void writeVariableInt(int value) {
         while ((value & -128) != 0) {
             this.writeByte(value & 127 | 128);
             value >>>= 7;
@@ -112,7 +113,7 @@ public class IntelligentByteBuf extends ByteBuf {
     }
 
     public String readString(int maxLength) {
-        int i = this.readVarInt();
+        int i = this.readVariableInt();
         if (i > maxLength * 4) {
             throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + i + " > " + maxLength * 4 + ")");
         } else if (i < 0) {
@@ -137,7 +138,7 @@ public class IntelligentByteBuf extends ByteBuf {
         if (bs.length > maxLength) {
             throw new EncoderException("String too big (was " + bs.length + " bytes encoded, max " + maxLength + ")");
         } else {
-            this.writeVarInt(bs.length);
+            this.writeVariableInt(bs.length);
             this.writeBytes(bs);
         }
     }

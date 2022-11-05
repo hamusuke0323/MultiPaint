@@ -25,7 +25,7 @@ public class PacketInflater extends ByteToMessageDecoder {
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         if (in.readableBytes() != 0) {
             IntelligentByteBuf byteBuf = new IntelligentByteBuf(in);
-            int i = byteBuf.readVarInt();
+            int i = byteBuf.readVariableInt();
             if (i == 0) {
                 out.add(byteBuf.readBytes(byteBuf.readableBytes()));
             } else {

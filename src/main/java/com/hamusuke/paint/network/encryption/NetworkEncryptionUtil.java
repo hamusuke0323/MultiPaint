@@ -14,8 +14,6 @@ public class NetworkEncryptionUtil {
     private static final int AES_KEY_LENGTH = 128;
     private static final String RSA = "RSA";
     private static final int RSA_KEY_LENGTH = 1024;
-    private static final String ISO_8859_1 = "ISO_8859_1";
-    private static final String SHA1 = "SHA-1";
 
     public static SecretKey generateKey() throws Exception {
         KeyGenerator keyGenerator = KeyGenerator.getInstance(AES);
@@ -31,7 +29,7 @@ public class NetworkEncryptionUtil {
 
     public static PublicKey readEncodedPublicKey(byte[] bytes) throws Exception {
         EncodedKeySpec encodedKeySpec = new X509EncodedKeySpec(bytes);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        KeyFactory keyFactory = KeyFactory.getInstance(RSA);
         return keyFactory.generatePublic(encodedKeySpec);
     }
 

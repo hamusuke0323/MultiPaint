@@ -14,10 +14,10 @@ public abstract class Canvas {
     protected Graphics2D graphics2D;
     protected final CanvasInfo info;
 
-    protected Canvas(String title, UUID author, int width, int height) {
-        this.info = new CanvasInfo(this.canvasId, title, author);
+    protected Canvas(UUID uuid, String title, UUID author, int width, int height) {
+        this.info = new CanvasInfo(this.canvasId, uuid, title, author);
         this.data = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        this.graphics2D = this.data.createGraphics();
+        this.graphics2D = this.getData().createGraphics();
         this.graphics2D.setColor(Color.WHITE);
         this.graphics2D.fillRect(0, 0, width, height);
     }
@@ -29,8 +29,8 @@ public abstract class Canvas {
     }
 
     public void resize(int width, int height) {
-        Image prev = this.data.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        BufferedImage newData = new BufferedImage(width, height, this.data.getType());
+        Image prev = this.getData().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage newData = new BufferedImage(width, height, this.getData().getType());
         this.data = newData;
         this.graphics2D = newData.createGraphics();
         this.graphics2D.setColor(Color.WHITE);
@@ -56,16 +56,16 @@ public abstract class Canvas {
     }
 
     public int getWidth() {
-        return this.data.getWidth();
+        return this.getData().getWidth();
     }
 
     public int getHeight() {
-        return this.data.getHeight();
+        return this.getData().getHeight();
     }
 
     public void setData(BufferedImage data) {
         this.data = data;
-        this.graphics2D = this.data.createGraphics();
-        this.graphics2D.drawImage(this.data, 0, 0, null);
+        this.graphics2D = this.getData().createGraphics();
+        this.graphics2D.drawImage(this.getData(), 0, 0, null);
     }
 }

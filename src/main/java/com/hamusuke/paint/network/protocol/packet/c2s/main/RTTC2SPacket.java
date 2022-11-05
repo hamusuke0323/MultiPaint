@@ -12,12 +12,12 @@ public class RTTC2SPacket implements Packet<ServerCommonPacketListener> {
     }
 
     public RTTC2SPacket(IntelligentByteBuf buf) {
-        this.rtt = buf.readVarInt();
+        this.rtt = buf.readVariableInt();
     }
 
     @Override
     public void write(IntelligentByteBuf byteBuf) {
-        byteBuf.writeVarInt(this.rtt);
+        byteBuf.writeVariableInt(this.rtt);
     }
 
     @Override

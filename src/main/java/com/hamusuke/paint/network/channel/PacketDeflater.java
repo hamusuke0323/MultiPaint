@@ -25,7 +25,7 @@ public class PacketDeflater extends MessageToByteEncoder<ByteBuf> {
         int i = msg.readableBytes();
         IntelligentByteBuf byteBuf = new IntelligentByteBuf(out);
         if (i < this.threshold) {
-            byteBuf.writeVarInt(0);
+            byteBuf.writeVariableInt(0);
             byteBuf.writeBytes(msg);
         } else {
             if (i > MAXIMUM_COMPRESSED_LENGTH) {
@@ -35,7 +35,7 @@ public class PacketDeflater extends MessageToByteEncoder<ByteBuf> {
             }
             byte[] bytes = new byte[i];
             msg.readBytes(bytes);
-            byteBuf.writeVarInt(bytes.length);
+            byteBuf.writeVariableInt(bytes.length);
             this.deflater.setInput(bytes, 0, i);
             this.deflater.finish();
 

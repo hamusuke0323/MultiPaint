@@ -23,15 +23,15 @@ public class LineData {
     }
 
     public static LineData unpack(IntelligentByteBuf byteBuf) {
-        return new LineData(byteBuf.readInt(), byteBuf.readInt(), byteBuf.readInt(), byteBuf.readInt(), new Color(byteBuf.readInt()), byteBuf.readFloat());
+        return new LineData(byteBuf.readVariableInt(), byteBuf.readVariableInt(), byteBuf.readVariableInt(), byteBuf.readVariableInt(), new Color(byteBuf.readVariableInt()), byteBuf.readFloat());
     }
 
     public void pack(IntelligentByteBuf byteBuf) {
-        byteBuf.writeInt(this.x1);
-        byteBuf.writeInt(this.y1);
-        byteBuf.writeInt(this.x2);
-        byteBuf.writeInt(this.y2);
-        byteBuf.writeInt(this.color.getRGB());
+        byteBuf.writeVariableInt(this.x1);
+        byteBuf.writeVariableInt(this.y1);
+        byteBuf.writeVariableInt(this.x2);
+        byteBuf.writeVariableInt(this.y2);
+        byteBuf.writeVariableInt(this.color.getRGB());
         byteBuf.writeFloat(this.width);
     }
 

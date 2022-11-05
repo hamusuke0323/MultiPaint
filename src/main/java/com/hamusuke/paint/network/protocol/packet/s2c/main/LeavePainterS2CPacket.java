@@ -12,12 +12,12 @@ public class LeavePainterS2CPacket implements Packet<ClientCommonPacketListener>
     }
 
     public LeavePainterS2CPacket(IntelligentByteBuf byteBuf) {
-        this.id = byteBuf.readVarInt();
+        this.id = byteBuf.readVariableInt();
     }
 
     @Override
     public void write(IntelligentByteBuf byteBuf) {
-        byteBuf.writeVarInt(this.id);
+        byteBuf.writeVariableInt(this.id);
     }
 
     @Override

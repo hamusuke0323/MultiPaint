@@ -14,12 +14,12 @@ public class JoinCanvasC2SPacket implements Packet<ServerCommonPacketListener> {
     }
 
     public JoinCanvasC2SPacket(IntelligentByteBuf byteBuf) {
-        this.canvasId = byteBuf.readVarInt();
+        this.canvasId = byteBuf.readVariableInt();
     }
 
     @Override
     public void write(IntelligentByteBuf byteBuf) throws IOException {
-        byteBuf.writeVarInt(this.canvasId);
+        byteBuf.writeVariableInt(this.canvasId);
     }
 
     @Override

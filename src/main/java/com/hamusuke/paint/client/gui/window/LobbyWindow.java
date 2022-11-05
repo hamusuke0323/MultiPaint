@@ -1,6 +1,8 @@
 package com.hamusuke.paint.client.gui.window;
 
 import com.hamusuke.paint.canvas.CanvasInfo;
+import com.hamusuke.paint.client.gui.dialog.CanvasCreatingDialog;
+import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.CreateCanvasC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.JoinCanvasC2SPacket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +37,7 @@ public class LobbyWindow extends Window {
         buttons.add(create, BorderLayout.NORTH);
         buttons.add(button, BorderLayout.SOUTH);
         this.add(buttons, BorderLayout.SOUTH);
-        this.setSize(720, 360);
+        this.setSize(1280, 360);
         this.setLocationRelativeTo(null);
     }
 
@@ -68,6 +70,9 @@ public class LobbyWindow extends Window {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "create":
+                new CanvasCreatingDialog(this, info -> {
+                    client.getConnection().sendPacket(new CreateCanvasC2SPacket(info.getTitle(), client.clientPainter.getUuid(), info.getWidth(), info.getHeight()));
+                });
                 break;
             case "join":
                 CanvasInfo canvasInfo = this.list.getSelectedValue();

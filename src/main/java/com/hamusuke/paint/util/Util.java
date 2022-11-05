@@ -1,6 +1,7 @@
 package com.hamusuke.paint.util;
 
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.gson.Gson;
 import com.hamusuke.paint.network.channel.IntelligentByteBuf;
 import it.unimi.dsi.fastutil.io.FastByteArrayInputStream;
 import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
@@ -9,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -26,6 +28,18 @@ public class Util {
     private static final ExecutorService IO_WORKER_EXECUTOR = createIoWorker();
     private static final String ALGORITHM = "SHA-256";
     public static LongSupplier nanoTimeSupplier = System::nanoTime;
+    public static final Gson GSON = new Gson();
+
+    public static File avoidDuplicatingDirectoryName(File dir, String dirName) {
+        File file = new File(dir, dirName);
+        int i = 1;
+        while (file.isDirectory() && file.exists()) {
+            file = new File(dir, dirName + "-" + i);
+            i++;
+        }
+
+        return file;
+    }
 
     public static <T> T make(Supplier<T> supplier) {
         return supplier.get();

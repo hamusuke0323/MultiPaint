@@ -12,13 +12,13 @@ public class PacketPrepender extends MessageToByteEncoder<ByteBuf> {
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf msg, ByteBuf out) {
         int i = msg.readableBytes();
-        int j = IntelligentByteBuf.getVarIntSize(i);
+        int j = IntelligentByteBuf.getVariableIntSize(i);
         if (j > MAX) {
             throw new IllegalArgumentException("unable to fit " + i + " into " + MAX);
         } else {
             IntelligentByteBuf byteBuf = new IntelligentByteBuf(out);
             byteBuf.ensureWritable(j + i);
-            byteBuf.writeVarInt(i);
+            byteBuf.writeVariableInt(i);
             byteBuf.writeBytes(msg, msg.readerIndex(), i);
         }
     }

@@ -57,7 +57,7 @@ public abstract class Painter {
     }
 
     public boolean isInCanvas(Canvas canvas) {
-        return this.isInAnyCanvas() && this.currentCanvas.getCanvasId() == canvas.getCanvasId();
+        return canvas != null && this.isInAnyCanvas() && this.currentCanvas.getCanvasId() == canvas.getCanvasId();
     }
 
     public boolean isInLobby() {

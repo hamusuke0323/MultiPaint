@@ -20,15 +20,15 @@ public class JoinCanvasS2CPacket implements Packet<ClientCommonPacketListener> {
 
     public JoinCanvasS2CPacket(IntelligentByteBuf byteBuf) {
         this.info = new CanvasInfo(byteBuf);
-        this.width = byteBuf.readVarInt();
-        this.height = byteBuf.readVarInt();
+        this.width = byteBuf.readVariableInt();
+        this.height = byteBuf.readVariableInt();
     }
 
     @Override
     public void write(IntelligentByteBuf byteBuf) throws IOException {
         this.info.pack(byteBuf);
-        byteBuf.writeVarInt(this.width);
-        byteBuf.writeVarInt(this.height);
+        byteBuf.writeVariableInt(this.width);
+        byteBuf.writeVariableInt(this.height);
     }
 
     @Override

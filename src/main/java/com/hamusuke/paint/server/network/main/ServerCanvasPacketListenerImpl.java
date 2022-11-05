@@ -4,6 +4,7 @@ import com.hamusuke.paint.network.LineData;
 import com.hamusuke.paint.network.channel.Connection;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.LineC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.SyncLinesC2SPacket;
+import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.CreateCanvasC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.JoinCanvasC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.RequestCanvasInfoC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.canvas.CanvasDataS2CPacket;
@@ -39,6 +40,11 @@ public class ServerCanvasPacketListenerImpl extends ServerCommonPacketListenerIm
 
     @Override
     public void handleJoinCanvas(JoinCanvasC2SPacket packet) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public void handleCreateCanvasPacket(CreateCanvasC2SPacket packet) {
         throw new IllegalStateException();
     }
 }

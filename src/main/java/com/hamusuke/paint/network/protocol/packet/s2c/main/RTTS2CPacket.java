@@ -14,14 +14,14 @@ public class RTTS2CPacket implements Packet<ClientCommonPacketListener> {
     }
 
     public RTTS2CPacket(IntelligentByteBuf byteBuf) {
-        this.painterId = byteBuf.readVarInt();
-        this.rtt = byteBuf.readVarInt();
+        this.painterId = byteBuf.readVariableInt();
+        this.rtt = byteBuf.readVariableInt();
     }
 
     @Override
     public void write(IntelligentByteBuf byteBuf) {
-        byteBuf.writeVarInt(this.painterId);
-        byteBuf.writeVarInt(this.rtt);
+        byteBuf.writeVariableInt(this.painterId);
+        byteBuf.writeVariableInt(this.rtt);
     }
 
     @Override

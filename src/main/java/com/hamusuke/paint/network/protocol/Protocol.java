@@ -22,6 +22,7 @@ import com.hamusuke.paint.network.protocol.packet.c2s.main.PingC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.RTTC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.LineC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.SyncLinesC2SPacket;
+import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.CreateCanvasC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.JoinCanvasC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.RequestCanvasInfoC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.s2c.login.*;
@@ -68,6 +69,7 @@ public enum Protocol {
                     .add(SyncLinesC2SPacket.class, SyncLinesC2SPacket::new)
                     .add(JoinCanvasC2SPacket.class, JoinCanvasC2SPacket::new)
                     .add(RequestCanvasInfoC2SPacket.class, RequestCanvasInfoC2SPacket::new)
+                    .add(CreateCanvasC2SPacket.class, CreateCanvasC2SPacket::new)
             )
     ),
     LOGIN(1, protocol()

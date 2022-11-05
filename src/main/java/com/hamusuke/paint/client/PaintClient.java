@@ -182,6 +182,7 @@ public class PaintClient extends ReentrantThreadExecutor<Runnable> {
         this.connection.sendPacket(new LoginHelloC2SPacket(this.uuidLoader.getUuid()));
     }
 
+    @Override
     public void close() {
         Util.shutdownExecutors();
         System.exit(0);

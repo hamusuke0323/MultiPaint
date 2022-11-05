@@ -2,18 +2,23 @@ package com.hamusuke.paint.server;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.hamusuke.paint.command.CommandSource;
+import com.hamusuke.paint.command.Commands;
 import com.hamusuke.paint.network.encryption.NetworkEncryptionUtil;
 import com.hamusuke.paint.network.protocol.packet.Packet;
+import com.hamusuke.paint.network.protocol.packet.s2c.main.lobby.CanvasInfoResponseS2CPacket;
 import com.hamusuke.paint.server.canvas.ServerCanvas;
 import com.hamusuke.paint.server.network.ServerPainter;
 import com.hamusuke.paint.util.Util;
 import com.hamusuke.paint.util.thread.ReentrantThreadExecutor;
+import com.mojang.brigadier.CommandDispatcher;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import java.io.File;
 import java.io.IOException;
 import java.security.KeyPair;
 import java.util.Collections;
@@ -26,13 +31,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
-public abstract class PaintServer extends ReentrantThreadExecutor<ServerTask> implements AutoCloseable {
+public abstract class PaintServer extends ReentrantThreadExecutor<ServerTask> implements AutoCloseable, CommandSource {
     private static final Logger LOGGER = LogManager.getLogger();
     private final ServerNetworkIo networkIo;
     private final Random random;
     private final AtomicBoolean running = new AtomicBoolean();
     private final Thread serverThread;
     private final Executor worker;
+    protected final CommandDispatcher<CommandSource> dispatcher = new CommandDispatcher<>();
     private String serverIp;
     private int serverPort;
     private boolean stopped;
@@ -45,6 +51,7 @@ public abstract class PaintServer extends ReentrantThreadExecutor<ServerTask> im
     private long timeReference;
     private long lastTimeReference;
     private final AtomicBoolean loading = new AtomicBoolean();
+    private final File saves;
     private final List<ServerCanvas> serverCanvases = Collections.synchronizedList(Lists.newArrayList());
 
     public PaintServer(Thread serverThread) {
@@ -56,8 +63,7 @@ public abstract class PaintServer extends ReentrantThreadExecutor<ServerTask> im
         this.serverThread = serverThread;
         this.worker = Util.getMainWorkerExecutor();
         this.setPainterManager(new PainterManager(this));
-        this.serverCanvases.add(new ServerCanvas("テストだよ", new UUID(0L, 0L), 1920, 1080));
-        this.serverCanvases.add(new ServerCanvas("テストだよ2", new UUID(0L, 0L), 1920, 1080));
+        this.saves = new File("saves");
     }
 
     public static <S extends PaintServer> S startServer(Function<Thread, S> factory) {
@@ -76,8 +82,37 @@ public abstract class PaintServer extends ReentrantThreadExecutor<ServerTask> im
 
     protected abstract boolean setupServer() throws IOException;
 
+    private synchronized void loadAll() {
+        LOGGER.info("Loading all canvases...");
+
+        if (!this.saves.exists() || !this.saves.isDirectory()) {
+            this.saves.mkdir();
+        }
+
+        File[] files = this.saves.listFiles(File::isDirectory);
+        if (files != null) {
+            for (File file : files) {
+                ServerCanvas serverCanvas = null;
+                try {
+                    serverCanvas = ServerCanvas.load(file);
+                } catch (Throwable e) {
+                    LOGGER.warn("Error occurred while loading a canvas", e);
+                }
+                if (serverCanvas != null) {
+                    this.serverCanvases.add(serverCanvas);
+                }
+            }
+        }
+    }
+
+    private synchronized void saveAll() {
+        this.serverCanvases.forEach(ServerCanvas::save);
+    }
+
     protected void runServer() {
         try {
+            this.loadAll();
+            Commands.registerCommands(this.dispatcher, !this.isLocal());
             if (this.setupServer()) {
                 this.timeReference = Util.getMeasuringTimeMs();
 
@@ -100,7 +135,7 @@ public abstract class PaintServer extends ReentrantThreadExecutor<ServerTask> im
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             LOGGER.error("Encountered an unexpected exception", e);
         } finally {
             try {
@@ -137,6 +172,13 @@ public abstract class PaintServer extends ReentrantThreadExecutor<ServerTask> im
         }
 
         return null;
+    }
+
+    public void createCanvas(String title, UUID author, int w, int h) {
+        ServerCanvas serverCanvas = new ServerCanvas(Util.avoidDuplicatingDirectoryName(this.saves, title), UUID.randomUUID(), title, author, w, h);
+        this.serverCanvases.add(serverCanvas);
+        serverCanvas.save();
+        this.getPainterManager().sendPacketToAllInLobby(new CanvasInfoResponseS2CPacket(Collections.singletonList(serverCanvas.getInfo())));
     }
 
     public void tick() {
@@ -184,6 +226,19 @@ public abstract class PaintServer extends ReentrantThreadExecutor<ServerTask> im
         if (this.getNetworkIo() != null) {
             this.getNetworkIo().stop();
         }
+
+        this.saveAll();
+    }
+
+    @Override
+    public PaintServer getServer() {
+        return this;
+    }
+
+    @Nullable
+    @Override
+    public ServerPainter getSender() {
+        return null;
     }
 
     public void stop(boolean bl) {
@@ -296,5 +351,9 @@ public abstract class PaintServer extends ReentrantThreadExecutor<ServerTask> im
     @Override
     protected Thread getThread() {
         return this.serverThread;
+    }
+
+    public File getSaves() {
+        return this.saves;
     }
 }

@@ -21,7 +21,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
         int i = in.readableBytes();
         if (i != 0) {
             IntelligentByteBuf buf = new IntelligentByteBuf(in);
-            int j = buf.readVarInt();
+            int j = buf.readVariableInt();
             Packet<?> packet = ctx.channel().attr(Connection.ATTRIBUTE_PROTOCOL).get().createPacket(this.direction, j, buf);
             if (packet == null) {
                 throw new IOException("Bad packet id: " + j);

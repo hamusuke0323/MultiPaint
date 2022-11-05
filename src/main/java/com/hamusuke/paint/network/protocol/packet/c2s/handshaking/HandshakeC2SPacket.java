@@ -21,18 +21,18 @@ public class HandshakeC2SPacket implements Packet<ServerHandshakePacketListener>
     }
 
     public HandshakeC2SPacket(IntelligentByteBuf buf) {
-        this.protocolVersion = buf.readVarInt();
+        this.protocolVersion = buf.readVariableInt();
         this.address = buf.readString(MAX_ADDRESS_LENGTH);
         this.port = buf.readUnsignedShort();
-        this.intendedProtocol = Protocol.byId(buf.readVarInt());
+        this.intendedProtocol = Protocol.byId(buf.readVariableInt());
     }
 
     @Override
     public void write(IntelligentByteBuf buf) {
-        buf.writeVarInt(this.protocolVersion);
+        buf.writeVariableInt(this.protocolVersion);
         buf.writeString(this.address);
         buf.writeShort(this.port);
-        buf.writeVarInt(this.intendedProtocol.getStateId());
+        buf.writeVariableInt(this.intendedProtocol.getStateId());
     }
 
     @Override
