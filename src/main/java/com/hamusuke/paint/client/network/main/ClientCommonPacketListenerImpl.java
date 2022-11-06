@@ -16,7 +16,6 @@ import com.hamusuke.paint.network.protocol.packet.c2s.main.RTTC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.SyncLinesC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.RequestCanvasInfoC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.*;
-import com.hamusuke.paint.network.protocol.packet.s2c.main.lobby.JoinCanvasS2CPacket;
 import com.hamusuke.paint.util.Util;
 
 public abstract class ClientCommonPacketListenerImpl implements ClientCommonPacketListener {
@@ -95,7 +94,7 @@ public abstract class ClientCommonPacketListenerImpl implements ClientCommonPack
     }
 
     @Override
-    public void handleJoinCanvas(JoinCanvasS2CPacket packet) {
+    public void handleJoinCanvasPacket(JoinCanvasS2CPacket packet) {
         ClientPainter painter = this.client.getById(packet.getId());
         if (painter != null) {
             ClientCanvas canvas = new ClientCanvas(packet.getInfo().getCanvasUUID(), packet.getInfo().getTitle(), packet.getInfo().getAuthor(), packet.getInfo().getWidth(), packet.getInfo().getHeight());
@@ -104,13 +103,38 @@ public abstract class ClientCommonPacketListenerImpl implements ClientCommonPack
 
             if (painter.equals(this.clientPainter)) {
                 this.client.painterList = new CanvasPainterList(this.client);
-                CanvasWindow canvasWindow = new CanvasWindow();
+                CanvasWindow canvasWindow = new CanvasWindow(canvas);
                 canvas.canvasWindow = canvasWindow;
                 ClientCanvasPacketListenerImpl listener = new ClientCanvasPacketListenerImpl(this.client, this.connection, canvasWindow, canvas);
                 this.client.listener = listener;
                 this.connection.setListener(listener);
                 this.client.setCurrentWindow(canvasWindow);
                 this.connection.sendPacket(new SyncLinesC2SPacket());
+            }
+        }
+    }
+
+    @Override
+    public void handleChangeColorPacket(ChangeColorS2CPacket packet) {
+        ClientPainter painter = this.client.getById(packet.getId());
+        if (painter != null) {
+            painter.setColor(packet.getColor());
+        }
+    }
+
+    @Override
+    public void handleLeaveCanvasPacket(LeaveCanvasS2CPacket packet) {
+        ClientPainter painter = this.client.getById(packet.getId());
+        if (painter != null) {
+            painter.joinCanvas(null);
+            if (painter.equals(this.clientPainter)) {
+                ClientLobbyPacketListenerImpl listener = new ClientLobbyPacketListenerImpl(this.client, this.connection);
+                this.connection.setListener(listener);
+                this.client.painterList = new PainterList(this.client);
+                LobbyWindow lobbyWindow = new LobbyWindow();
+                listener.lobbyWindow = lobbyWindow;
+                this.client.setCurrentWindow(lobbyWindow);
+                this.connection.sendPacket(new RequestCanvasInfoC2SPacket());
             }
         }
     }

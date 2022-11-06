@@ -2,11 +2,15 @@ package com.hamusuke.paint.server.network.main;
 
 import com.hamusuke.paint.network.LineData;
 import com.hamusuke.paint.network.channel.Connection;
+import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.ChangeColorC2SPacket;
+import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.LeaveCanvasC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.LineC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.SyncLinesC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.CreateCanvasC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.JoinCanvasC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.RequestCanvasInfoC2SPacket;
+import com.hamusuke.paint.network.protocol.packet.s2c.main.ChangeColorS2CPacket;
+import com.hamusuke.paint.network.protocol.packet.s2c.main.LeaveCanvasS2CPacket;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.canvas.CanvasDataS2CPacket;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.canvas.LineS2CPacket;
 import com.hamusuke.paint.server.PaintServer;
@@ -46,5 +50,18 @@ public class ServerCanvasPacketListenerImpl extends ServerCommonPacketListenerIm
     @Override
     public void handleCreateCanvasPacket(CreateCanvasC2SPacket packet) {
         throw new IllegalStateException();
+    }
+
+    @Override
+    public void handleChangeColorPacket(ChangeColorC2SPacket packet) {
+        this.painter.setColor(packet.getColor());
+        this.server.sendPacketToAll(new ChangeColorS2CPacket(this.painter));
+    }
+
+    @Override
+    public void handleLeaveCanvasPacket(LeaveCanvasC2SPacket packet) {
+        this.painter.joinCanvas(null);
+        new ServerLobbyPacketListenerImpl(this.server, this.connection, this.painter);
+        this.server.sendPacketToAll(new LeaveCanvasS2CPacket(this.painter));
     }
 }

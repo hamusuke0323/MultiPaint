@@ -10,7 +10,6 @@ import java.util.UUID;
 public class ClientCanvas extends Canvas {
     public CanvasWindow canvasWindow;
 
-
     public ClientCanvas(UUID uuid, String title, UUID author, int width, int height) {
         super(uuid, title, author, width, height);
     }

@@ -12,6 +12,7 @@ public class ClientLobbyPacketListenerImpl extends ClientCommonPacketListenerImp
 
     public ClientLobbyPacketListenerImpl(PaintClient client, Connection connection) {
         super(client, connection);
+        this.clientPainter = client.clientPainter;
     }
 
     @Override

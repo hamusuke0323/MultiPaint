@@ -32,12 +32,12 @@ public class LoginWindow extends Window {
 
     private JMenuBar createMenuBar() {
         JMenuBar jMenuBar = new JMenuBar();
-        JMenu file = new JMenu("File");
+        JMenu menu = new JMenu("Menu");
         JMenuItem disconnect = new JMenuItem("Disconnect");
         disconnect.setActionCommand("disconnect");
         disconnect.addActionListener(this);
-        file.add(disconnect);
-        jMenuBar.add(file);
+        menu.add(disconnect);
+        jMenuBar.add(menu);
         return jMenuBar;
     }
 

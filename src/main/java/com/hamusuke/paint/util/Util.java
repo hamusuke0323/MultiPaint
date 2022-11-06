@@ -1,7 +1,6 @@
 package com.hamusuke.paint.util;
 
 import com.google.common.util.concurrent.MoreExecutors;
-import com.google.gson.Gson;
 import com.hamusuke.paint.network.channel.IntelligentByteBuf;
 import it.unimi.dsi.fastutil.io.FastByteArrayInputStream;
 import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
@@ -28,7 +27,6 @@ public class Util {
     private static final ExecutorService IO_WORKER_EXECUTOR = createIoWorker();
     private static final String ALGORITHM = "SHA-256";
     public static LongSupplier nanoTimeSupplier = System::nanoTime;
-    public static final Gson GSON = new Gson();
 
     public static File avoidDuplicatingDirectoryName(File dir, String dirName) {
         File file = new File(dir, dirName);

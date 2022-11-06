@@ -80,14 +80,7 @@ public class CanvasInfo implements Serializable {
 
     @Override
     public String toString() {
-        return "CanvasInfo{" +
-                "canvasId=" + canvasId +
-                ", canvasUUID=" + canvasUUID +
-                ", title='" + title + '\'' +
-                ", author=" + author +
-                ", width=" + width +
-                ", height=" + height +
-                '}';
+        return String.format("%s, W: %d, H: %d, UUID: %s", this.title, this.width, this.height, this.canvasUUID);
     }
 
     @Override

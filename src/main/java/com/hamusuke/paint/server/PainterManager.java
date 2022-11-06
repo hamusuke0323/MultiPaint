@@ -5,9 +5,10 @@ import com.google.common.collect.Lists;
 import com.hamusuke.paint.network.Painter;
 import com.hamusuke.paint.network.channel.Connection;
 import com.hamusuke.paint.network.protocol.packet.Packet;
+import com.hamusuke.paint.network.protocol.packet.s2c.main.ChangeColorS2CPacket;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.ChatS2CPacket;
+import com.hamusuke.paint.network.protocol.packet.s2c.main.JoinCanvasS2CPacket;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.JoinPainterS2CPacket;
-import com.hamusuke.paint.network.protocol.packet.s2c.main.lobby.JoinCanvasS2CPacket;
 import com.hamusuke.paint.server.network.ServerPainter;
 import com.hamusuke.paint.server.network.main.ServerLobbyPacketListenerImpl;
 import io.netty.util.concurrent.Future;
@@ -37,6 +38,7 @@ public class PainterManager {
         synchronized (this.painters) {
             this.painters.forEach(serverPainter1 -> listener.connection.sendPacket(new JoinPainterS2CPacket(serverPainter1, true)));
             this.painters.stream().filter(Painter::isInAnyCanvas).forEach(serverPainter1 -> listener.connection.sendPacket(new JoinCanvasS2CPacket(serverPainter1, serverPainter1.getCurrentCanvas().getInfo())));
+            this.painters.forEach(serverPainter1 -> listener.connection.sendPacket(new ChangeColorS2CPacket(serverPainter1)));
             this.painters.add(serverPainter);
         }
     }

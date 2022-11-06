@@ -14,6 +14,7 @@ import com.hamusuke.paint.network.protocol.Protocol;
 import com.hamusuke.paint.network.protocol.packet.c2s.handshaking.HandshakeC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.login.LoginHelloC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.DisconnectC2SPacket;
+import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.LeaveCanvasC2SPacket;
 import com.hamusuke.paint.server.PaintServer;
 import com.hamusuke.paint.server.integrated.IntegratedServer;
 import com.hamusuke.paint.util.Util;
@@ -102,6 +103,10 @@ public class PaintClient extends ReentrantThreadExecutor<Runnable> {
         }
 
         throw new IllegalStateException("Y the client-side painter is null???");
+    }
+
+    public String getAddresses() {
+        return this.connection == null ? "" : String.format("Client Address: %s, Server Address: %s", this.connection.getChannel().localAddress(), this.connection.getChannel().remoteAddress());
     }
 
     @Nullable
@@ -223,6 +228,10 @@ public class PaintClient extends ReentrantThreadExecutor<Runnable> {
 
     public void disconnect() {
         this.connection.sendPacket(new DisconnectC2SPacket(), future -> this.connection.disconnect());
+    }
+
+    public void leaveCanvas() {
+        this.connection.sendPacket(new LeaveCanvasC2SPacket());
     }
 
     public void stopServer() {

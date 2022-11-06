@@ -1,26 +1,42 @@
 package com.hamusuke.paint.client.gui.window;
 
+import com.hamusuke.paint.client.canvas.ClientCanvas;
 import com.hamusuke.paint.client.gui.component.CanvasComponent;
+import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.ChangeColorC2SPacket;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
+import java.awt.*;
 
 public class CanvasWindow extends Window {
     private CanvasComponent canvas;
 
-    public CanvasWindow() {
-        super(String.format("Client Address: %s, Server Address: %s", client.getConnection().getChannel().localAddress(), client.getConnection().getChannel().remoteAddress()));
+    public CanvasWindow(ClientCanvas canvas) {
+        super(canvas.getInfo().toString());
     }
 
     private JMenuBar createMenuBar() {
         JMenuBar jMenuBar = new JMenuBar();
-        JMenu file = new JMenu("File");
+        JMenu menu = new JMenu("Menu");
         JMenuItem disconnect = new JMenuItem("Disconnect");
-        disconnect.setActionCommand("disconnect");
-        disconnect.addActionListener(this);
-        file.add(disconnect);
-        jMenuBar.add(file);
+        disconnect.addActionListener(e -> this.onClose());
+        JMenuItem exit = new JMenuItem("Leave Canvas");
+        exit.addActionListener(e -> this.dispose(client::leaveCanvas));
+        menu.add(disconnect);
+        menu.add(exit);
+        JMenu canvas = new JMenu("Canvas");
+        JMenuItem color = new JMenuItem("Change Color");
+        color.addActionListener(e -> this.changeColor(JColorChooser.showDialog(this, "Choose a color to paint", Color.BLACK)));
+        canvas.add(color);
+        jMenuBar.add(menu);
+        jMenuBar.add(canvas);
         return jMenuBar;
+    }
+
+    private void changeColor(@Nullable Color color) {
+        if (color != null) {
+            client.getConnection().sendPacket(new ChangeColorC2SPacket(color));
+        }
     }
 
     @Override
@@ -46,14 +62,5 @@ public class CanvasWindow extends Window {
     @Override
     protected void onClose() {
         this.dispose(client::disconnect);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        switch (e.getActionCommand()) {
-            case "disconnect":
-                this.onClose();
-                break;
-        }
     }
 }

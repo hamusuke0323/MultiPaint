@@ -3,6 +3,7 @@ package com.hamusuke.paint.network;
 import com.hamusuke.paint.canvas.Canvas;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,6 +15,7 @@ public abstract class Painter {
     protected Canvas currentCanvas;
     private int id = PAINTER_ID_INCREMENTER.getAndIncrement();
     private int ping;
+    private Color color;
 
     protected Painter(UUID uuid) {
         this.uuid = uuid;
@@ -41,6 +43,18 @@ public abstract class Painter {
 
     public void setPing(int ping) {
         this.ping = ping;
+    }
+
+    public Color getColor() {
+        if (this.color == null) {
+            this.setColor(Color.BLACK);
+        }
+
+        return this.color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public void joinCanvas(Canvas canvas) {

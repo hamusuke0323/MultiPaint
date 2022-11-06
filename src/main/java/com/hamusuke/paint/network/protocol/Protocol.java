@@ -20,6 +20,8 @@ import com.hamusuke.paint.network.protocol.packet.c2s.main.ChatC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.DisconnectC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.PingC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.RTTC2SPacket;
+import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.ChangeColorC2SPacket;
+import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.LeaveCanvasC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.LineC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.SyncLinesC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.CreateCanvasC2SPacket;
@@ -30,7 +32,6 @@ import com.hamusuke.paint.network.protocol.packet.s2c.main.*;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.canvas.CanvasDataS2CPacket;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.canvas.LineS2CPacket;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.lobby.CanvasInfoResponseS2CPacket;
-import com.hamusuke.paint.network.protocol.packet.s2c.main.lobby.JoinCanvasS2CPacket;
 import com.hamusuke.paint.util.Util;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -59,6 +60,8 @@ public enum Protocol {
                     .add(LineS2CPacket.class, LineS2CPacket::new)
                     .add(CanvasInfoResponseS2CPacket.class, CanvasInfoResponseS2CPacket::new)
                     .add(JoinCanvasS2CPacket.class, JoinCanvasS2CPacket::new)
+                    .add(ChangeColorS2CPacket.class, ChangeColorS2CPacket::new)
+                    .add(LeaveCanvasS2CPacket.class, LeaveCanvasS2CPacket::new)
             )
             .addDirection(PacketDirection.SERVERBOUND, new PacketSet<ServerCommonPacketListener>()
                     .add(DisconnectC2SPacket.class, DisconnectC2SPacket::new)
@@ -70,6 +73,8 @@ public enum Protocol {
                     .add(JoinCanvasC2SPacket.class, JoinCanvasC2SPacket::new)
                     .add(RequestCanvasInfoC2SPacket.class, RequestCanvasInfoC2SPacket::new)
                     .add(CreateCanvasC2SPacket.class, CreateCanvasC2SPacket::new)
+                    .add(ChangeColorC2SPacket.class, ChangeColorC2SPacket::new)
+                    .add(LeaveCanvasC2SPacket.class, LeaveCanvasC2SPacket::new)
             )
     ),
     LOGIN(1, protocol()

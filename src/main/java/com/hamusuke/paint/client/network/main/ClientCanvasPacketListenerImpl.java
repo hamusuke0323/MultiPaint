@@ -16,6 +16,7 @@ public class ClientCanvasPacketListenerImpl extends ClientCommonPacketListenerIm
         super(client, connection);
         this.canvasWindow = canvasWindow;
         this.canvas = canvas;
+        this.clientPainter = client.clientPainter;
     }
 
     @Override

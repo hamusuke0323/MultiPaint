@@ -6,8 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class CanvasCreatingDialog extends JDialog {
-    public CanvasCreatingDialog(Frame owner, Consumer<CanvasInformation> consumer) {
+public class CreatingCanvasDialog extends JDialog {
+    public CreatingCanvasDialog(Frame owner, Consumer<CanvasInformation> consumer) {
         super(owner, true);
         this.setTitle("Create Canvas");
 
