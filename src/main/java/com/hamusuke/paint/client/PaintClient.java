@@ -232,6 +232,7 @@ public class PaintClient extends ReentrantThreadExecutor<Runnable> {
 
     public void leaveCanvas() {
         this.connection.sendPacket(new LeaveCanvasC2SPacket());
+        this.painterList.clear();
     }
 
     public void stopServer() {

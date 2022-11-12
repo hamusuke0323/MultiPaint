@@ -102,6 +102,7 @@ public abstract class ClientCommonPacketListenerImpl implements ClientCommonPack
             painter.joinCanvas(canvas);
 
             if (painter.equals(this.clientPainter)) {
+                this.client.painterList.clear();
                 this.client.painterList = new CanvasPainterList(this.client);
                 CanvasWindow canvasWindow = new CanvasWindow(canvas);
                 canvas.canvasWindow = canvasWindow;

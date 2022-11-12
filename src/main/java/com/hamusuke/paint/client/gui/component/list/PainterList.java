@@ -3,7 +3,6 @@ package com.hamusuke.paint.client.gui.component.list;
 import com.hamusuke.paint.client.PaintClient;
 
 import javax.swing.*;
-import javax.swing.event.TableColumnModelEvent;
 import javax.swing.table.DefaultTableModel;
 
 public class PainterList extends JTable {
@@ -31,5 +30,9 @@ public class PainterList extends JTable {
                 MODEL.addRow(new Object[]{painter, painter.getPing() + "ms"});
             });
         }
+    }
+
+    public void clear() {
+        MODEL.setRowCount(0);
     }
 }

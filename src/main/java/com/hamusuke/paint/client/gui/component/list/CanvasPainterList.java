@@ -23,4 +23,8 @@ public class CanvasPainterList extends PainterList {
             });
         }
     }
+
+    public void clear() {
+        MODEL.setRowCount(0);
+    }
 }
