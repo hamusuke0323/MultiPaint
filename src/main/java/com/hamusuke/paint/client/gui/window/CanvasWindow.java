@@ -35,7 +35,7 @@ public class CanvasWindow extends Window {
 
     private void changeColor(@Nullable Color color) {
         if (color != null) {
-            client.getConnection().sendPacket(new ChangeColorC2SPacket(color));
+            client.getConnection().sendPacket(new ChangeColorC2SPacket(new Color(color.getRed(), color.getGreen(), color.getBlue())));
         }
     }
 

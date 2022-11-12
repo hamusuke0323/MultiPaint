@@ -160,6 +160,6 @@ public class ServerLoginPacketListenerImpl implements ServerLoginPacketListener 
         KEY,
         AUTH,
         READY,
-        ACCEPTED;
+        ACCEPTED
     }
 }

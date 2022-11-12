@@ -17,7 +17,11 @@ public class LobbyWindow extends Window {
     private DefaultListModel<CanvasInfo> listModel;
 
     public LobbyWindow() {
-        super("Lobby - " + client.getAddresses());
+        super(getWindowTitle());
+    }
+
+    private static String getWindowTitle() {
+        return client.getConnection().isLocal() ? "Lobby" : "Lobby - " + client.getAddresses();
     }
 
     private static void addButton(Container owner, Component component, GridBagLayout layout, int x, int y, int w, int h, double wy) {
