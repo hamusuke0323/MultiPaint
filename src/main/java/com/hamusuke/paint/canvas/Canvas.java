@@ -25,6 +25,7 @@ public abstract class Canvas {
     public void acceptLine(LineData lineData) {
         this.graphics2D.setStroke(new BasicStroke(lineData.width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         this.graphics2D.setColor(lineData.color);
+        this.graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, lineData.color.getAlpha() / 255.0F));
         this.graphics2D.drawLine(lineData.x1, lineData.y1, lineData.x2, lineData.y2);
     }
 

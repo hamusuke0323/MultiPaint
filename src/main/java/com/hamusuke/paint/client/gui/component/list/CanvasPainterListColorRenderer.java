@@ -15,7 +15,7 @@ public class CanvasPainterListColorRenderer extends DefaultTableCellRenderer {
             label.set((JLabel) super.getTableCellRendererComponent(table, c, isSelected, hasFocus, row, integer));
             label.get().setText("");
             label.get().setBackground(c);
-            label.get().setToolTipText("R: " + c.getRed() + ", G: " + c.getGreen() + ", B: " + c.getBlue());
+            label.get().setToolTipText(String.format("A: %d, R: %d, G: %d, B: %d", c.getAlpha(), c.getRed(), c.getGreen(), c.getBlue()));
         });
 
         return label.get();

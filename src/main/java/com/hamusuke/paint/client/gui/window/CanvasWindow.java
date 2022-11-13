@@ -19,14 +19,14 @@ public class CanvasWindow extends Window {
         JMenuBar jMenuBar = new JMenuBar();
         JMenu menu = new JMenu("Menu");
         JMenuItem disconnect = new JMenuItem("Disconnect");
-        disconnect.addActionListener(e -> this.onClose());
+        disconnect.addActionListener(e -> client.disconnect());
         JMenuItem exit = new JMenuItem("Leave Canvas");
         exit.addActionListener(e -> this.dispose(client::leaveCanvas));
         menu.add(disconnect);
         menu.add(exit);
         JMenu canvas = new JMenu("Canvas");
         JMenuItem color = new JMenuItem("Change Color");
-        color.addActionListener(e -> this.changeColor(JColorChooser.showDialog(this, "Choose a color to paint", Color.BLACK)));
+        color.addActionListener(e -> this.changeColor(JColorChooser.showDialog(this, "Choose a color to paint", client.clientPainter.getColor())));
         canvas.add(color);
         jMenuBar.add(menu);
         jMenuBar.add(canvas);
@@ -35,22 +35,21 @@ public class CanvasWindow extends Window {
 
     private void changeColor(@Nullable Color color) {
         if (color != null) {
-            client.getConnection().sendPacket(new ChangeColorC2SPacket(new Color(color.getRed(), color.getGreen(), color.getBlue())));
+            client.getConnection().sendPacket(new ChangeColorC2SPacket(color));
         }
     }
 
     @Override
     protected void init() {
-        JPanel panel = new JPanel(this.springLayout);
         this.canvas = new CanvasComponent(client, client.getCurrentCanvas());
-
-        this.addScalable(panel, this.createMenuBar(), 0.0F, 0.0F, 1.0F, 0.05F);
-        this.addScalable(panel, new JScrollPane(this.canvas), 0.0F, 0.05F, 0.85F, 0.8F);
-        this.addScalable(panel, client.chat.getTextArea(), 0.0F, 0.85F, 0.85F, 0.1F);
-        this.addScalable(panel, client.chat.getField(), 0.0F, 0.95F, 0.85F, 0.05F);
-        this.addScalable(panel, new JScrollPane(client.painterList), 0.85F, 0.05F, 0.15F, 0.95F);
-
-        this.add(panel);
+        this.add(this.createMenuBar(), BorderLayout.NORTH);
+        GridBagLayout layout = new GridBagLayout();
+        JPanel panel = new JPanel(layout);
+        addButton(panel, new JScrollPane(this.canvas), layout, 0, 0, 1, 1, 1.0D);
+        addButton(panel, client.chat.getTextArea(), layout, 0, 1, 1, 1, 0.25D);
+        addButton(panel, client.chat.getField(), layout, 0, 2, 1, 1, 0.125D);
+        addButton(panel, new JScrollPane(client.painterList), layout, 1, 0, 1, 3, 0.5D, 1.0D);
+        this.add(panel, BorderLayout.CENTER);
         this.setSize(720, 720);
         this.setLocationRelativeTo(null);
     }
@@ -61,6 +60,6 @@ public class CanvasWindow extends Window {
 
     @Override
     protected void onClose() {
-        this.dispose(client::disconnect);
+        this.dispose(client::leaveCanvas);
     }
 }

@@ -1,6 +1,7 @@
 package com.hamusuke.paint.client.gui.window;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -11,8 +12,6 @@ public class ConnectingWindow extends Window {
 
     @Override
     protected void init() {
-        JPanel panel = new JPanel(this.springLayout);
-
         JTextField host = new JTextField();
         host.setName("host");
         host.setText("localhost");
@@ -38,12 +37,13 @@ public class ConnectingWindow extends Window {
             });
         });
 
-        float oneThird = 1.0F / 3.0F;
-        this.addScalable(panel, host, 0.0F, 0.0F, 1.0F, oneThird);
-        this.addScalable(panel, port, 0.0F, oneThird, 1.0F, oneThird);
-        this.addScalable(panel, button, 0.0F, oneThird * 2.0F, 1.0F, oneThird);
+        GridBagLayout layout = new GridBagLayout();
+        JPanel panel = new JPanel(layout);
+        addButton(panel, host, layout, 0, 0, 1, 1, 1.0D);
+        addButton(panel, port, layout, 0, 1, 1, 1, 1.0D);
+        addButton(panel, button, layout, 0, 2, 1, 1, 1.0D);
 
-        this.add(panel);
+        this.add(panel, BorderLayout.CENTER);
         this.setSize(350, 120);
         this.setLocationRelativeTo(null);
     }

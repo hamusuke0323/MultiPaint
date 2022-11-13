@@ -1,6 +1,7 @@
 package com.hamusuke.paint.client.gui.window;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class MenuWindow extends Window {
@@ -10,20 +11,18 @@ public class MenuWindow extends Window {
 
     @Override
     protected void init() {
-        JPanel panel = new JPanel(this.springLayout);
-
         JButton single = new JButton("Single Paint");
         single.setActionCommand("single");
         single.addActionListener(this);
         JButton multi = new JButton("Multi Paint");
         multi.setActionCommand("multi");
         multi.addActionListener(this);
-
-        this.addScalable(panel, single, 0.0F, 0.0F, 1.0F, 0.5F);
-        this.addScalable(panel, multi, 0.0F, 0.5F, 1.0F, 0.5F);
-
-        this.add(panel);
-        this.setSize(360, 120);
+        GridBagLayout layout = new GridBagLayout();
+        this.setLayout(layout);
+        addButton(this, single, layout, 0, 0, 1, 1, 1.0D);
+        addButton(this, multi, layout, 0, 1, 1, 1, 1.0D);
+        this.pack();
+        this.setSize(this.getWidth() + this.getWidth() / 2, this.getHeight());
         this.setLocationRelativeTo(null);
     }
 

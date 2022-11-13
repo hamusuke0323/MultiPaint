@@ -24,6 +24,7 @@ public class CanvasComponent extends JComponent implements MouseListener, MouseM
     public CanvasComponent(PaintClient client, ClientCanvas canvas) {
         this.client = client;
         this.canvas = canvas;
+        this.setOpaque(false);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
     }

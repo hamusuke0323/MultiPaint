@@ -70,7 +70,7 @@ public class ServerCanvas extends Canvas {
 
     public synchronized void save() {
         if (!this.saveDir.exists()) {
-            this.saveDir.mkdir();
+            this.saveDir.mkdirs();
         }
 
         try (ObjectOutputStream stream = new ObjectOutputStream(Files.newOutputStream(new File(this.saveDir, "canvas.dat").toPath()))) {

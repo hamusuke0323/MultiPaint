@@ -11,7 +11,6 @@ import java.awt.event.WindowListener;
 
 public abstract class Window extends JFrame implements ActionListener, WindowListener {
     protected static final PaintClient client = PaintClient.getInstance();
-    protected final SpringLayout springLayout = new SpringLayout();
     private Runnable onDisposed = () -> {
     };
 
@@ -22,20 +21,22 @@ public abstract class Window extends JFrame implements ActionListener, WindowLis
         this.setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
-    protected void addScalable(Container container, JComponent child, float scaleX, float scaleY, float scaleWidth, float scaleHeight) {
-        this.modifyScale(container, child, scaleX, scaleY, scaleWidth, scaleHeight);
-        container.add(child);
+    protected static void addButton(Container owner, Component component, GridBagLayout layout, int x, int y, int w, int h, double wx, double wy) {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx = x;
+        constraints.gridy = y;
+        constraints.insets = new Insets(1, 1, 1, 1);
+        constraints.gridwidth = w;
+        constraints.gridheight = h;
+        constraints.weightx = wx;
+        constraints.weighty = wy;
+        layout.setConstraints(component, constraints);
+        owner.add(component);
     }
 
-    protected void modifyScale(Container container, JComponent child, float scaleX, float scaleY, float scaleWidth, float scaleHeight) {
-        Spring width = this.springLayout.getConstraint(SpringLayout.WIDTH, container);
-        Spring height = this.springLayout.getConstraint(SpringLayout.HEIGHT, container);
-
-        SpringLayout.Constraints constraints = this.springLayout.getConstraints(child);
-        constraints.setX(Spring.scale(width, scaleX));
-        constraints.setY(Spring.scale(height, scaleY));
-        constraints.setWidth(Spring.scale(width, scaleWidth));
-        constraints.setHeight(Spring.scale(height, scaleHeight));
+    protected static void addButton(Container owner, Component component, GridBagLayout layout, int x, int y, int w, int h, double wh) {
+        addButton(owner, component, layout, x, y, w, h, 1.0D, wh);
     }
 
     protected abstract void init();

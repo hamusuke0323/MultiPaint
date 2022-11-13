@@ -24,20 +24,6 @@ public class LobbyWindow extends Window {
         return client.getConnection().isLocal() ? "Lobby" : "Lobby - " + client.getAddresses();
     }
 
-    private static void addButton(Container owner, Component component, GridBagLayout layout, int x, int y, int w, int h, double wy) {
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridx = x;
-        constraints.gridy = y;
-        constraints.insets = new Insets(1, 1, 1, 1);
-        constraints.gridwidth = w;
-        constraints.gridheight = h;
-        constraints.weightx = 1.0D;
-        constraints.weighty = wy;
-        layout.setConstraints(component, constraints);
-        owner.add(component);
-    }
-
     @Override
     protected void init() {
         this.listModel = new DefaultListModel<>();
