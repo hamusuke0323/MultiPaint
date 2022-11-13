@@ -15,7 +15,9 @@ public class CanvasWindow extends Window {
         super(canvas.getInfo().toString());
     }
 
-    private JMenuBar createMenuBar() {
+    @Nullable
+    @Override
+    protected JMenuBar createMenuBar() {
         JMenuBar jMenuBar = new JMenuBar();
         JMenu menu = new JMenu("Menu");
         JMenuItem disconnect = new JMenuItem("Disconnect");
@@ -42,7 +44,6 @@ public class CanvasWindow extends Window {
     @Override
     protected void init() {
         this.canvas = new CanvasComponent(client, client.getCurrentCanvas());
-        this.add(this.createMenuBar(), BorderLayout.NORTH);
         GridBagLayout layout = new GridBagLayout();
         JPanel panel = new JPanel(layout);
         addButton(panel, new JScrollPane(this.canvas), layout, 0, 0, 1, 1, 1.0D);

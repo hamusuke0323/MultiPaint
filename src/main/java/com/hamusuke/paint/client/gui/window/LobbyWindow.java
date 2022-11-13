@@ -7,6 +7,7 @@ import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.JoinCanvasC2SPa
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,7 +29,6 @@ public class LobbyWindow extends Window {
     protected void init() {
         this.listModel = new DefaultListModel<>();
         this.list = new JList<>(this.listModel);
-        this.add(this.createMenuBar(), BorderLayout.NORTH);
 
         JButton create = new JButton("Create New Canvas");
         create.addActionListener(this);
@@ -50,7 +50,9 @@ public class LobbyWindow extends Window {
         this.setLocationRelativeTo(null);
     }
 
-    private JMenuBar createMenuBar() {
+    @Nullable
+    @Override
+    protected JMenuBar createMenuBar() {
         JMenuBar jMenuBar = new JMenuBar();
         JMenu menu = new JMenu("Menu");
         JMenuItem disconnect = new JMenuItem("Disconnect");

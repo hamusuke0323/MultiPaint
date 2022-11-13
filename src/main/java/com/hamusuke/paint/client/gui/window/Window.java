@@ -2,6 +2,7 @@ package com.hamusuke.paint.client.gui.window;
 
 import com.hamusuke.paint.client.PaintClient;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,9 +17,18 @@ public abstract class Window extends JFrame implements ActionListener, WindowLis
 
     protected Window(String title) {
         this.setTitle(title);
+        JMenuBar bar = this.createMenuBar();
+        if (bar != null) {
+            this.add(bar, BorderLayout.NORTH);
+        }
         this.init();
         this.addWindowListener(this);
         this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+    }
+
+    @Nullable
+    protected JMenuBar createMenuBar() {
+        return null;
     }
 
     protected static void addButton(Container owner, Component component, GridBagLayout layout, int x, int y, int w, int h, double wx, double wy) {

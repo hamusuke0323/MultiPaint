@@ -3,6 +3,7 @@ package com.hamusuke.paint.client.gui.window;
 import com.hamusuke.paint.network.protocol.packet.c2s.login.AuthResponseC2SPacket;
 import com.hamusuke.paint.util.Util;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,7 +23,6 @@ public class LoginWindow extends Window {
         login.setActionCommand("login");
         login.addActionListener(this);
 
-        this.add(this.createMenuBar(), BorderLayout.NORTH);
         this.add(this.passwordField, BorderLayout.CENTER);
         this.add(login, BorderLayout.SOUTH);
         this.pack();
@@ -30,7 +30,9 @@ public class LoginWindow extends Window {
         this.setLocationRelativeTo(null);
     }
 
-    private JMenuBar createMenuBar() {
+    @Nullable
+    @Override
+    protected JMenuBar createMenuBar() {
         JMenuBar jMenuBar = new JMenuBar();
         JMenu menu = new JMenu("Menu");
         JMenuItem disconnect = new JMenuItem("Disconnect");
