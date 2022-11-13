@@ -1,5 +1,7 @@
 package com.hamusuke.paint.client.gui.window;
 
+import com.hamusuke.paint.client.gui.dialog.DedicatedConnectingDialog;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -32,9 +34,7 @@ public class ConnectingWindow extends Window {
 
         JButton button = new JButton("Connect");
         button.addActionListener(e -> {
-            this.setVisible(false);
-            client.connectToServer(host.getText(), Integer.parseInt(port.getText()), s -> {
-            });
+            new DedicatedConnectingDialog(this, client, host.getText(), Integer.parseInt(port.getText()));
         });
 
         GridBagLayout layout = new GridBagLayout();
@@ -50,6 +50,8 @@ public class ConnectingWindow extends Window {
 
     @Override
     protected void onDisposed() {
-        client.setCurrentWindow(new MenuWindow());
+        if (client.getConnection() == null) {
+            client.setCurrentWindow(new MenuWindow());
+        }
     }
 }

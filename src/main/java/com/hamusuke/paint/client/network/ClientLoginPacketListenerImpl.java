@@ -23,14 +23,16 @@ public class ClientLoginPacketListenerImpl implements ClientLoginPacketListener 
     private static final Logger LOGGER = LogManager.getLogger();
     private final PaintClient client;
     private final Consumer<String> statusConsumer;
+    private final Runnable onJoinLobby;
     private final Connection connection;
     private boolean waitingAuthComplete;
     private int ticks;
 
-    public ClientLoginPacketListenerImpl(Connection connection, PaintClient client, Consumer<String> statusConsumer) {
+    public ClientLoginPacketListenerImpl(Connection connection, PaintClient client, Consumer<String> statusConsumer, Runnable onJoinLobby) {
         this.client = client;
         this.connection = connection;
         this.statusConsumer = statusConsumer;
+        this.onJoinLobby = onJoinLobby;
     }
 
     @Override
@@ -68,6 +70,7 @@ public class ClientLoginPacketListenerImpl implements ClientLoginPacketListener 
         this.statusConsumer.accept("Joining the lobby...");
         this.connection.setProtocol(Protocol.MAIN);
         this.connection.setListener(new ClientLobbyPacketListenerImpl(this.client, this.connection));
+        this.onJoinLobby.run();
     }
 
     @Override
@@ -85,6 +88,7 @@ public class ClientLoginPacketListenerImpl implements ClientLoginPacketListener 
     @Override
     public void onAuth(AuthRequestS2CPacket packet) {
         this.waitingAuthComplete = true;
+        this.onJoinLobby.run();
         this.client.setCurrentWindow(new LoginWindow());
     }
 

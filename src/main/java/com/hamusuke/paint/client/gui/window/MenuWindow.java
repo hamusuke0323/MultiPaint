@@ -1,5 +1,7 @@
 package com.hamusuke.paint.client.gui.window;
 
+import com.hamusuke.paint.client.gui.dialog.IntegratedConnectingDialog;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -34,14 +36,12 @@ public class MenuWindow extends Window {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        this.setVisible(false);
-
         switch (e.getActionCommand()) {
             case "single":
-                client.startIntegratedServer(s -> {
-                });
+                new IntegratedConnectingDialog(this, client);
                 break;
             case "multi":
+                this.dispose();
                 client.setCurrentWindow(new ConnectingWindow());
                 break;
         }

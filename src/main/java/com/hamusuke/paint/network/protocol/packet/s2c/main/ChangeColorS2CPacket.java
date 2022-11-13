@@ -19,13 +19,13 @@ public class ChangeColorS2CPacket implements Packet<ClientCommonPacketListener> 
 
     public ChangeColorS2CPacket(IntelligentByteBuf byteBuf) {
         this.id = byteBuf.readVariableInt();
-        this.color = new Color(byteBuf.readVariableInt());
+        this.color = byteBuf.readColor();
     }
 
     @Override
     public void write(IntelligentByteBuf byteBuf) throws IOException {
         byteBuf.writeVariableInt(this.id);
-        byteBuf.writeVariableInt(this.color.getRGB());
+        byteBuf.writeColor(this.color);
     }
 
     @Override

@@ -146,6 +146,9 @@ public abstract class ClientCommonPacketListenerImpl implements ClientCommonPack
         this.client.disconnect();
         this.client.stopServer();
         this.client.setCurrentWindow(new MenuWindow());
+        this.client.clientPainter = null;
+        this.client.painterList = null;
+        this.client.chat = null;
     }
 
     public PaintClient getClient() {
@@ -155,9 +158,5 @@ public abstract class ClientCommonPacketListenerImpl implements ClientCommonPack
     @Override
     public Connection getConnection() {
         return this.connection;
-    }
-
-    public ClientPainter getClientPainter() {
-        return this.clientPainter;
     }
 }

@@ -15,12 +15,12 @@ public class ChangeColorC2SPacket implements Packet<ServerCommonPacketListener> 
     }
 
     public ChangeColorC2SPacket(IntelligentByteBuf byteBuf) {
-        this.color = new Color(byteBuf.readVariableInt());
+        this.color = byteBuf.readColor();
     }
 
     @Override
     public void write(IntelligentByteBuf byteBuf) throws IOException {
-        byteBuf.writeVariableInt(this.color.getRGB());
+        byteBuf.writeColor(this.color);
     }
 
     @Override

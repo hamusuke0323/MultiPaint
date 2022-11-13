@@ -7,6 +7,7 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import io.netty.util.ByteProcessor;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -38,6 +39,14 @@ public class IntelligentByteBuf extends ByteBuf {
         }
 
         return 5;
+    }
+
+    public void writeColor(Color color) {
+        this.writeVariableInt(color.getRGB());
+    }
+
+    public Color readColor() {
+        return new Color(this.readVariableInt(), true);
     }
 
     public <E> void writeList(Collection<E> list, BiConsumer<E, IntelligentByteBuf> writer) {

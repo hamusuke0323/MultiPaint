@@ -11,7 +11,7 @@ import java.awt.event.WindowListener;
 
 public abstract class Window extends JFrame implements ActionListener, WindowListener {
     protected static final PaintClient client = PaintClient.getInstance();
-    private Runnable onDisposed = () -> {
+    protected Runnable onDisposed = () -> {
     };
 
     protected Window(String title) {

@@ -8,9 +8,7 @@ import java.util.function.Consumer;
 
 public class CreatingCanvasDialog extends JDialog {
     public CreatingCanvasDialog(Frame owner, Consumer<CanvasInformation> consumer) {
-        super(owner, true);
-        this.setTitle("Create Canvas");
-
+        super(owner, "Create Canvas", true);
         JTextField field = new JTextField("New Canvas");
         JSpinner width = new JSpinner(new SpinnerNumberModel(1, 1, 7680, 1));
         ((JSpinner.NumberEditor) width.getEditor()).getFormat().setGroupingUsed(false);

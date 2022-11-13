@@ -175,7 +175,9 @@ public class PaintClient extends ReentrantThreadExecutor<Runnable> {
         return null;
     }
 
-    public void startIntegratedServer(Consumer<String> consumer) {
+    public void startIntegratedServer(Consumer<String> consumer, Runnable onJoinLobby) {
+        this.clientPainter = null;
+        consumer.accept("Starting local server...");
         this.server = PaintServer.startServer(thread -> new IntegratedServer(thread, this));
         while (!this.server.isLoading()) {
             try {
@@ -184,18 +186,20 @@ public class PaintClient extends ReentrantThreadExecutor<Runnable> {
             }
         }
 
+        consumer.accept("Connecting to local server...");
         SocketAddress socketAddress = this.server.getNetworkIo().bindLocal();
         Connection connection = Connection.connectLocal(socketAddress);
-        connection.setListener(new ClientLoginPacketListenerImpl(connection, this, consumer));
+        connection.setListener(new ClientLoginPacketListenerImpl(connection, this, consumer, onJoinLobby));
         connection.sendPacket(new HandshakeC2SPacket(socketAddress.toString(), 0, Protocol.LOGIN));
         connection.sendPacket(new LoginHelloC2SPacket(this.uuidLoader.getUuid()));
         this.connection = connection;
     }
 
-    public void connectToServer(String host, int port, Consumer<String> consumer) {
+    public void connectToServer(String host, int port, Consumer<String> consumer, Runnable onJoinLobby) {
+        this.clientPainter = null;
         InetSocketAddress address = new InetSocketAddress(host, port);
         this.connection = Connection.connect(address);
-        this.connection.setListener(new ClientLoginPacketListenerImpl(this.connection, this, consumer));
+        this.connection.setListener(new ClientLoginPacketListenerImpl(this.connection, this, consumer, onJoinLobby));
         this.connection.sendPacket(new HandshakeC2SPacket(host, port, Protocol.LOGIN));
         this.connection.sendPacket(new LoginHelloC2SPacket(this.uuidLoader.getUuid()));
     }
