@@ -104,6 +104,8 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
             if (packetListener.shouldCrashOnException()) {
                 throw new RuntimeException(e);
             }
+
+            LOGGER.warn("Error occurred while handling packet", e);
         }
     }
 
