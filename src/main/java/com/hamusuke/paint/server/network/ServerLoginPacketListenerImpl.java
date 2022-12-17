@@ -105,10 +105,14 @@ public class ServerLoginPacketListenerImpl implements ServerLoginPacketListener 
     public void onHello(LoginHelloC2SPacket packet) {
         Validate.validState(this.state == State.HELLO, "Unexpected hello packet");
         this.serverPainter = new ServerPainter(packet.getClient(), this.server, null);
-        if (!this.connection.isLocal()) {
+        if (!this.connection.isLocal() && packet.canEncrypt()) {
             this.state = State.KEY;
             this.connection.sendPacket(new LoginHelloS2CPacket("", this.server.getKeyPair().getPublic().getEncoded(), this.nonce));
         } else {
+            if (!packet.canEncrypt()) {
+                LOGGER.warn("The connection won't be encrypted.");
+            }
+
             this.state = State.READY;
             this.serverPainter.setAuthorized(true);
         }

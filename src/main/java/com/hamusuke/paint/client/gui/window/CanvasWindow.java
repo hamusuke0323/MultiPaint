@@ -13,6 +13,7 @@ public class CanvasWindow extends Window {
 
     public CanvasWindow(ClientCanvas canvas) {
         super(canvas.getInfo().toString());
+        canvas.canvasWindow = this;
     }
 
     @Nullable

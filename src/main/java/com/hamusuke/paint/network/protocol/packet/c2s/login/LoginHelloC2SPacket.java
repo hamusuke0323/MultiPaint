@@ -8,18 +8,26 @@ import java.util.UUID;
 
 public class LoginHelloC2SPacket implements Packet<ServerLoginPacketListener> {
     private final UUID client;
+    private final boolean cantEncrypt;
 
     public LoginHelloC2SPacket(UUID client) {
+        this(client, false);
+    }
+
+    public LoginHelloC2SPacket(UUID client, boolean cantEncrypt) {
         this.client = client;
+        this.cantEncrypt = cantEncrypt;
     }
 
     public LoginHelloC2SPacket(IntelligentByteBuf byteBuf) {
         this.client = byteBuf.readUUID();
+        this.cantEncrypt = byteBuf.readBoolean();
     }
 
     @Override
     public void write(IntelligentByteBuf byteBuf) {
         byteBuf.writeUUID(this.client);
+        byteBuf.writeBoolean(this.cantEncrypt);
     }
 
     @Override
@@ -29,5 +37,9 @@ public class LoginHelloC2SPacket implements Packet<ServerLoginPacketListener> {
 
     public UUID getClient() {
         return this.client;
+    }
+
+    public boolean canEncrypt() {
+        return !this.cantEncrypt;
     }
 }

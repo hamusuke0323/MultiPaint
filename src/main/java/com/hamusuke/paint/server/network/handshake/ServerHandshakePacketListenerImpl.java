@@ -8,8 +8,11 @@ import com.hamusuke.paint.network.protocol.packet.c2s.handshaking.HandshakeC2SPa
 import com.hamusuke.paint.network.protocol.packet.s2c.login.LoginDisconnectS2CPacket;
 import com.hamusuke.paint.server.PaintServer;
 import com.hamusuke.paint.server.network.ServerLoginPacketListenerImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ServerHandshakePacketListenerImpl implements ServerHandshakePacketListener {
+    private static final Logger LOGGER = LogManager.getLogger();
     private final PaintServer server;
     private final Connection connection;
 
@@ -27,6 +30,7 @@ public class ServerHandshakePacketListenerImpl implements ServerHandshakePacketL
                     this.connection.sendPacket(new LoginDisconnectS2CPacket());
                     this.connection.disconnect();
                 } else {
+                    LOGGER.info("Hello Packet came from {} and the connection established!", this.connection.getAddress());
                     this.connection.setListener(new ServerLoginPacketListenerImpl(this.server, this.connection));
                 }
                 break;

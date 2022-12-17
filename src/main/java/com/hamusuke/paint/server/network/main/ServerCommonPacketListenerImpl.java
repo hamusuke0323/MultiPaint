@@ -31,7 +31,6 @@ public abstract class ServerCommonPacketListenerImpl implements ServerCommonPack
 
     @Override
     public void handleDisconnect(DisconnectC2SPacket packet) {
-        this.painter.sendPacketToOthers(new LeavePainterS2CPacket(this.painter.getId()));
         this.connection.disconnect();
     }
 
@@ -54,6 +53,7 @@ public abstract class ServerCommonPacketListenerImpl implements ServerCommonPack
     @Override
     public void onDisconnected() {
         LOGGER.info("{} lost connection", this.connection.getAddress());
+        this.painter.sendPacketToOthers(new LeavePainterS2CPacket(this.painter.getId()));
         this.server.getPainterManager().removePainter(this.painter);
         if (this.server.isLocal()) {
             this.server.stop(false);

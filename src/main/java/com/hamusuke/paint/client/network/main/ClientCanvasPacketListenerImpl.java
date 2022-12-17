@@ -30,12 +30,6 @@ public class ClientCanvasPacketListenerImpl extends ClientCommonPacketListenerIm
     }
 
     @Override
-    public void onDisconnected() {
-        this.canvasWindow.dispose();
-        super.onDisconnected();
-    }
-
-    @Override
     public void handleCanvasInfoResponse(CanvasInfoResponseS2CPacket packet) {
         throw new IllegalStateException();
     }

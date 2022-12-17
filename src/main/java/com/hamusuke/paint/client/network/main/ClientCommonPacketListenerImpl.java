@@ -8,6 +8,7 @@ import com.hamusuke.paint.client.gui.component.list.PainterList;
 import com.hamusuke.paint.client.gui.window.CanvasWindow;
 import com.hamusuke.paint.client.gui.window.LobbyWindow;
 import com.hamusuke.paint.client.gui.window.MenuWindow;
+import com.hamusuke.paint.client.gui.window.Window;
 import com.hamusuke.paint.client.network.ClientPainter;
 import com.hamusuke.paint.network.channel.Connection;
 import com.hamusuke.paint.network.listener.client.main.ClientCommonPacketListener;
@@ -105,7 +106,6 @@ public abstract class ClientCommonPacketListenerImpl implements ClientCommonPack
                 this.client.painterList.clear();
                 this.client.painterList = new CanvasPainterList(this.client);
                 CanvasWindow canvasWindow = new CanvasWindow(canvas);
-                canvas.canvasWindow = canvasWindow;
                 ClientCanvasPacketListenerImpl listener = new ClientCanvasPacketListenerImpl(this.client, this.connection, canvasWindow, canvas);
                 this.client.listener = listener;
                 this.connection.setListener(listener);
@@ -145,6 +145,10 @@ public abstract class ClientCommonPacketListenerImpl implements ClientCommonPack
         this.client.clientPainters.clear();
         this.client.disconnect();
         this.client.stopServer();
+        Window window = this.client.getCurrentWindow();
+        if (window != null) {
+            window.dispose();
+        }
         this.client.setCurrentWindow(new MenuWindow());
         this.client.clientPainter = null;
         this.client.painterList = null;
