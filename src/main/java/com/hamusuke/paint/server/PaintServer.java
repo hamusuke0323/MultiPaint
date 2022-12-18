@@ -105,7 +105,7 @@ public abstract class PaintServer extends ReentrantThreadExecutor<ServerTask> im
         }
     }
 
-    private synchronized void saveAll() {
+    public synchronized void saveAll() {
         this.serverCanvases.forEach(ServerCanvas::save);
     }
 
