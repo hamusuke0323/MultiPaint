@@ -20,5 +20,7 @@ public interface ClientCommonPacketListener extends PacketListener, ClientCanvas
 
     void handleChangeColorPacket(ChangeColorS2CPacket packet);
 
+    void handleChangeWidthPacket(ChangeWidthS2CPacket packet);
+
     void handleLeaveCanvasPacket(LeaveCanvasS2CPacket packet);
 }

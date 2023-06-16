@@ -16,6 +16,7 @@ public abstract class Painter {
     private int id = PAINTER_ID_INCREMENTER.getAndIncrement();
     private int ping;
     private Color color;
+    private float width = 5.0F;
 
     protected Painter(UUID uuid) {
         this.uuid = uuid;
@@ -53,8 +54,16 @@ public abstract class Painter {
         return this.color;
     }
 
+    public float getWidth() {
+        return this.width;
+    }
+
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
     }
 
     public void joinCanvas(Canvas canvas) {

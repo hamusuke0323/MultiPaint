@@ -17,7 +17,6 @@ public class CanvasComponent extends JComponent implements MouseListener, MouseM
     private int px = -1;
     private int py = -1;
     private Operation op = Operation.UNKNOWN;
-    private float width = 5.0F;
     private final PaintClient client;
     private final ClientCanvas canvas;
 
@@ -41,7 +40,7 @@ public class CanvasComponent extends JComponent implements MouseListener, MouseM
     public void paint(Graphics g) {
         if (this.isLineValid()) {
             if (this.op == Operation.DRAW) {
-                this.sendLine(new LineData(this.px, this.py, this.x, this.y, this.client.clientPainter.getColor(), this.width));
+                this.sendLine(new LineData(this.px, this.py, this.x, this.y, this.client.clientPainter.getColor(), this.client.clientPainter.getWidth()));
             } else if (this.op == Operation.ERASE) {
                 this.sendLine(new LineData(this.px, this.py, this.x, this.y, Color.WHITE, 50.0F));
             }

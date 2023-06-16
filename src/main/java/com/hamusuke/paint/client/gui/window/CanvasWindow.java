@@ -2,7 +2,9 @@ package com.hamusuke.paint.client.gui.window;
 
 import com.hamusuke.paint.client.canvas.ClientCanvas;
 import com.hamusuke.paint.client.gui.component.CanvasComponent;
+import com.hamusuke.paint.client.gui.dialog.ChangeWidthDialog;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.ChangeColorC2SPacket;
+import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.ChangeWidthC2SPacket;
 
 import javax.annotation.Nullable;
 import javax.swing.*;
@@ -30,7 +32,12 @@ public class CanvasWindow extends Window {
         JMenu canvas = new JMenu("Canvas");
         JMenuItem color = new JMenuItem("Change Color");
         color.addActionListener(e -> this.changeColor(JColorChooser.showDialog(this, "Choose a color to paint", client.clientPainter.getColor())));
+
+        JMenuItem width = new JMenuItem("Change Width");
+        width.addActionListener(e -> this.changeWidth());
+
         canvas.add(color);
+        canvas.add(width);
         jMenuBar.add(menu);
         jMenuBar.add(canvas);
         return jMenuBar;
@@ -40,6 +47,12 @@ public class CanvasWindow extends Window {
         if (color != null) {
             client.getConnection().sendPacket(new ChangeColorC2SPacket(color));
         }
+    }
+
+    private void changeWidth() {
+        new ChangeWidthDialog(this, (int) client.clientPainter.getWidth(), integer -> {
+            client.getConnection().sendPacket(new ChangeWidthC2SPacket(integer));
+        });
     }
 
     @Override

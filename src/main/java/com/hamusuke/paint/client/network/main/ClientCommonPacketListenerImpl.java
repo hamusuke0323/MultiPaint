@@ -124,6 +124,14 @@ public abstract class ClientCommonPacketListenerImpl implements ClientCommonPack
     }
 
     @Override
+    public void handleChangeWidthPacket(ChangeWidthS2CPacket packet) {
+        ClientPainter painter = this.client.getById(packet.getId());
+        if (painter != null) {
+            painter.setWidth(packet.getWidth());
+        }
+    }
+
+    @Override
     public void handleLeaveCanvasPacket(LeaveCanvasS2CPacket packet) {
         ClientPainter painter = this.client.getById(packet.getId());
         if (painter != null) {

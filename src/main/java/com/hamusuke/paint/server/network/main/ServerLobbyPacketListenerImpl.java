@@ -1,10 +1,7 @@
 package com.hamusuke.paint.server.network.main;
 
 import com.hamusuke.paint.network.channel.Connection;
-import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.ChangeColorC2SPacket;
-import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.LeaveCanvasC2SPacket;
-import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.LineC2SPacket;
-import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.SyncLinesC2SPacket;
+import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.*;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.CreateCanvasC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.JoinCanvasC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.RequestCanvasInfoC2SPacket;
@@ -56,6 +53,11 @@ public class ServerLobbyPacketListenerImpl extends ServerCommonPacketListenerImp
 
     @Override
     public void handleChangeColorPacket(ChangeColorC2SPacket packet) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public void handleChangeWidthPacket(ChangeWidthC2SPacket packet) {
         throw new IllegalStateException();
     }
 

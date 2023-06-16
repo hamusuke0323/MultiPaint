@@ -20,10 +20,7 @@ import com.hamusuke.paint.network.protocol.packet.c2s.main.ChatC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.DisconnectC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.PingC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.RTTC2SPacket;
-import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.ChangeColorC2SPacket;
-import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.LeaveCanvasC2SPacket;
-import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.LineC2SPacket;
-import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.SyncLinesC2SPacket;
+import com.hamusuke.paint.network.protocol.packet.c2s.main.canvas.*;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.CreateCanvasC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.JoinCanvasC2SPacket;
 import com.hamusuke.paint.network.protocol.packet.c2s.main.lobby.RequestCanvasInfoC2SPacket;
@@ -61,6 +58,7 @@ public enum Protocol {
                     .add(CanvasInfoResponseS2CPacket.class, CanvasInfoResponseS2CPacket::new)
                     .add(JoinCanvasS2CPacket.class, JoinCanvasS2CPacket::new)
                     .add(ChangeColorS2CPacket.class, ChangeColorS2CPacket::new)
+                    .add(ChangeWidthS2CPacket.class, ChangeWidthS2CPacket::new)
                     .add(LeaveCanvasS2CPacket.class, LeaveCanvasS2CPacket::new)
             )
             .addDirection(PacketDirection.SERVERBOUND, new PacketSet<ServerCommonPacketListener>()
@@ -74,6 +72,7 @@ public enum Protocol {
                     .add(RequestCanvasInfoC2SPacket.class, RequestCanvasInfoC2SPacket::new)
                     .add(CreateCanvasC2SPacket.class, CreateCanvasC2SPacket::new)
                     .add(ChangeColorC2SPacket.class, ChangeColorC2SPacket::new)
+                    .add(ChangeWidthC2SPacket.class, ChangeWidthC2SPacket::new)
                     .add(LeaveCanvasC2SPacket.class, LeaveCanvasC2SPacket::new)
             )
     ),
