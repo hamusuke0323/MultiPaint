@@ -2,8 +2,6 @@ package com.hamusuke.paint.server.canvas;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonWriter;
 import com.hamusuke.paint.canvas.Canvas;
 import com.hamusuke.paint.canvas.CanvasInfo;
 import com.hamusuke.paint.network.LineData;
@@ -27,7 +25,7 @@ public class ServerCanvas extends Canvas {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private final PaintServer server;
     private final File saveDir;
-    private final File playerSaveDir;
+    private final File painterSaveDir;
     private final Deque<BufferedImage> historic = new ConcurrentFixedDeque<>(10);
 
     public ServerCanvas(PaintServer server, File saveDir, UUID uuid, String title, UUID author, int width, int height) {
@@ -38,9 +36,9 @@ public class ServerCanvas extends Canvas {
             this.saveDir.mkdir();
         }
 
-        this.playerSaveDir = this.saveDir.toPath().resolve("players").toFile();
-        if (!this.playerSaveDir.isDirectory() || !this.playerSaveDir.exists()) {
-            this.playerSaveDir.mkdir();
+        this.painterSaveDir = this.saveDir.toPath().resolve("painters").toFile();
+        if (!this.painterSaveDir.isDirectory() || !this.painterSaveDir.exists()) {
+            this.painterSaveDir.mkdir();
         }
     }
 
@@ -95,28 +93,28 @@ public class ServerCanvas extends Canvas {
             LOGGER.warn("Error occurred while saving the canvas", e);
         }
 
-        this.savePlayers();
+        this.savePainters();
     }
 
-    private synchronized void savePlayers() {
-        if (!this.playerSaveDir.exists()) {
-            this.playerSaveDir.mkdir();
+    private synchronized void savePainters() {
+        if (!this.painterSaveDir.exists()) {
+            this.painterSaveDir.mkdir();
         }
 
         this.server.getPainterManager().getPainters().stream().filter(painter -> painter.isInCanvas(this)).forEach(this::savePainter);
     }
 
     public void savePainter(ServerPainter painter) {
-        File data = this.createPlayerDataFile(painter);
+        File data = this.createPainterDataFile(painter);
         try (FileWriter writer = new FileWriter(data)) {
             GSON.toJson(painter.serialize(), writer);
         } catch (Exception e) {
-            LOGGER.warn("Error occurred while saving players", e);
+            LOGGER.warn("Error occurred while saving painters", e);
         }
     }
 
     public void loadPainter(ServerPainter painter) {
-        File data = this.createPlayerDataFile(painter);
+        File data = this.createPainterDataFile(painter);
 
         if (!data.exists()) {
             return;
@@ -132,7 +130,7 @@ public class ServerCanvas extends Canvas {
         }
     }
 
-    private File createPlayerDataFile(ServerPainter painter) {
-        return this.playerSaveDir.toPath().resolve(painter.getUuid().toString() + ".json").toFile();
+    private File createPainterDataFile(ServerPainter painter) {
+        return this.painterSaveDir.toPath().resolve(painter.getUuid().toString() + ".json").toFile();
     }
 }
