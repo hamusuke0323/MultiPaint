@@ -64,8 +64,15 @@ public class ServerCanvasPacketListenerImpl extends ServerCommonPacketListenerIm
 
     @Override
     public void handleLeaveCanvasPacket(LeaveCanvasC2SPacket packet) {
+        ServerCanvas curCanvas = this.painter.getCurrentCanvas();
+
         this.painter.joinCanvas(null);
         new ServerLobbyPacketListenerImpl(this.server, this.connection, this.painter);
+
+        if (curCanvas != null) {
+            curCanvas.savePainter(this.painter);
+        }
+
         this.server.sendPacketToAll(new LeaveCanvasS2CPacket(this.painter));
     }
 }

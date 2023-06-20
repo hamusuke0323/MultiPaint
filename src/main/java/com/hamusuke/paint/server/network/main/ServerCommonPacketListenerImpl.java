@@ -11,6 +11,7 @@ import com.hamusuke.paint.network.protocol.packet.s2c.main.LeavePainterS2CPacket
 import com.hamusuke.paint.network.protocol.packet.s2c.main.PongS2CPacket;
 import com.hamusuke.paint.network.protocol.packet.s2c.main.RTTS2CPacket;
 import com.hamusuke.paint.server.PaintServer;
+import com.hamusuke.paint.server.canvas.ServerCanvas;
 import com.hamusuke.paint.server.network.ServerPainter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,6 +54,12 @@ public abstract class ServerCommonPacketListenerImpl implements ServerCommonPack
     @Override
     public void onDisconnected() {
         LOGGER.info("{} lost connection", this.connection.getAddress());
+
+        ServerCanvas curCanvas = this.painter.getCurrentCanvas();
+        if (curCanvas != null) {
+            curCanvas.savePainter(this.painter);
+        }
+
         this.painter.sendPacketToOthers(new LeavePainterS2CPacket(this.painter.getId()));
         this.server.getPainterManager().removePainter(this.painter);
         if (this.server.isLocal()) {

@@ -94,7 +94,7 @@ public abstract class PaintServer extends ReentrantThreadExecutor<ServerTask> im
             for (File file : files) {
                 ServerCanvas serverCanvas = null;
                 try {
-                    serverCanvas = ServerCanvas.load(file);
+                    serverCanvas = ServerCanvas.load(this, file);
                 } catch (Throwable e) {
                     LOGGER.warn("Error occurred while loading a canvas", e);
                 }
@@ -175,7 +175,7 @@ public abstract class PaintServer extends ReentrantThreadExecutor<ServerTask> im
     }
 
     public void createCanvas(String title, UUID author, int w, int h) {
-        ServerCanvas serverCanvas = new ServerCanvas(Util.avoidDuplicatingDirectoryName(this.saves, title), UUID.randomUUID(), title, author, w, h);
+        ServerCanvas serverCanvas = new ServerCanvas(this, Util.avoidDuplicatingDirectoryName(this.saves, title), UUID.randomUUID(), title, author, w, h);
         this.serverCanvases.add(serverCanvas);
         serverCanvas.save();
         this.getPainterManager().sendPacketToAllInLobby(new CanvasInfoResponseS2CPacket(Collections.singletonList(serverCanvas.getInfo())));
