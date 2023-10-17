@@ -5,10 +5,7 @@ import com.hamusuke.paint.client.canvas.ClientCanvas;
 import com.hamusuke.paint.client.gui.component.Chat;
 import com.hamusuke.paint.client.gui.component.list.CanvasPainterList;
 import com.hamusuke.paint.client.gui.component.list.PainterList;
-import com.hamusuke.paint.client.gui.window.CanvasWindow;
-import com.hamusuke.paint.client.gui.window.LobbyWindow;
-import com.hamusuke.paint.client.gui.window.MenuWindow;
-import com.hamusuke.paint.client.gui.window.Window;
+import com.hamusuke.paint.client.gui.window.*;
 import com.hamusuke.paint.client.network.ClientPainter;
 import com.hamusuke.paint.network.channel.Connection;
 import com.hamusuke.paint.network.listener.client.main.ClientCommonPacketListener;
@@ -24,6 +21,7 @@ public abstract class ClientCommonPacketListenerImpl implements ClientCommonPack
     protected final PaintClient client;
     protected ClientPainter clientPainter;
     protected int tickCount;
+    protected String disconnectionMsg = "";
 
     protected ClientCommonPacketListenerImpl(PaintClient client, Connection connection) {
         this.client = client;
@@ -62,6 +60,7 @@ public abstract class ClientCommonPacketListenerImpl implements ClientCommonPack
 
     @Override
     public void handleDisconnectPacket(DisconnectS2CPacket packet) {
+        this.disconnectionMsg = packet.getMsg();
         this.connection.disconnect();
     }
 
@@ -157,7 +156,7 @@ public abstract class ClientCommonPacketListenerImpl implements ClientCommonPack
         if (window != null) {
             window.dispose();
         }
-        this.client.setCurrentWindow(new MenuWindow());
+        this.client.setCurrentWindow(new DisconnectWindow(this.disconnectionMsg, MenuWindow::new));
         this.client.clientPainter = null;
         this.client.painterList = null;
         this.client.chat = null;

@@ -142,7 +142,7 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         if (this.channel.isOpen()) {
             LOGGER.error(String.format("Caught exception in %s side", this.receiving == PacketDirection.SERVERBOUND ? "server" : "client"), cause);
-            this.sendPacket(this.getProtocol() == Protocol.LOGIN ? new LoginDisconnectS2CPacket() : new DisconnectS2CPacket(), future -> {
+            this.sendPacket(this.getProtocol() == Protocol.LOGIN ? new LoginDisconnectS2CPacket(cause.getLocalizedMessage()) : new DisconnectS2CPacket(), future -> {
                 this.disconnect();
             });
             this.disableAutoRead();

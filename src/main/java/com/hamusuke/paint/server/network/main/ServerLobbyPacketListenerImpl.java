@@ -11,10 +11,14 @@ import com.hamusuke.paint.network.protocol.packet.s2c.main.lobby.CanvasInfoRespo
 import com.hamusuke.paint.server.PaintServer;
 import com.hamusuke.paint.server.canvas.ServerCanvas;
 import com.hamusuke.paint.server.network.ServerPainter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.stream.Collectors;
 
 public class ServerLobbyPacketListenerImpl extends ServerCommonPacketListenerImpl {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     public ServerLobbyPacketListenerImpl(PaintServer server, Connection connection, ServerPainter painter) {
         super(server, connection, painter);
     }
@@ -34,7 +38,8 @@ public class ServerLobbyPacketListenerImpl extends ServerCommonPacketListenerImp
 
             canvas.loadPainter(this.painter);
         } else {
-            this.connection.sendPacket(new DisconnectS2CPacket(), future -> this.connection.disconnect());
+            LOGGER.warn("{} tried to join unknown canvas (canvas id: {})", this.painter.connection.connection.getAddress(), packet.getCanvasId());
+            this.connection.sendPacket(new DisconnectS2CPacket("You tried to join unknown canvas!"), future -> this.connection.disconnect());
         }
     }
 

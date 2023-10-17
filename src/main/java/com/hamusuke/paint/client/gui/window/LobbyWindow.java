@@ -26,7 +26,7 @@ public class LobbyWindow extends Window {
     }
 
     @Override
-    protected void init() {
+    public void init() {
         this.listModel = new DefaultListModel<>();
         this.list = new JList<>(this.listModel);
 

@@ -12,7 +12,7 @@ public class MenuWindow extends Window {
     }
 
     @Override
-    protected void init() {
+    public void init() {
         JButton single = new JButton("Single Paint");
         single.setActionCommand("single");
         single.addActionListener(this);

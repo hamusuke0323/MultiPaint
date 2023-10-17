@@ -120,7 +120,7 @@ public class ServerNetworkIo {
                         }
 
                         LOGGER.warn("Failed to handle packet for {}", connection.getAddress(), e);
-                        connection.sendPacket(new DisconnectS2CPacket(), future -> connection.disconnect());
+                        connection.sendPacket(new DisconnectS2CPacket(e.getLocalizedMessage()), future -> connection.disconnect());
                         connection.disableAutoRead();
                     }
                 }

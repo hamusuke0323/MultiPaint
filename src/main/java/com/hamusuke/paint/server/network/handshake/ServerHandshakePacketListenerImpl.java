@@ -27,7 +27,7 @@ public class ServerHandshakePacketListenerImpl implements ServerHandshakePacketL
             case LOGIN:
                 this.connection.setProtocol(Protocol.LOGIN);
                 if (packet.getProtocolVersion() != Constants.PROTOCOL_VERSION) {
-                    this.connection.sendPacket(new LoginDisconnectS2CPacket());
+                    this.connection.sendPacket(new LoginDisconnectS2CPacket("Protocol version is different!"));
                     this.connection.disconnect();
                 } else {
                     LOGGER.info("Hello Packet came from {} and the connection established!", this.connection.getAddress());

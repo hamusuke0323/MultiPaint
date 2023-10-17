@@ -21,7 +21,6 @@ public abstract class Window extends JFrame implements ActionListener, WindowLis
         if (bar != null) {
             this.add(bar, BorderLayout.NORTH);
         }
-        this.init();
         this.addWindowListener(this);
         this.setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
@@ -49,7 +48,7 @@ public abstract class Window extends JFrame implements ActionListener, WindowLis
         addButton(owner, component, layout, x, y, w, h, 1.0D, wh);
     }
 
-    protected abstract void init();
+    public abstract void init();
 
     public void tick() {
     }

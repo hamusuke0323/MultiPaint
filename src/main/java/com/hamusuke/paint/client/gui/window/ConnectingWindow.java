@@ -13,7 +13,7 @@ public class ConnectingWindow extends Window {
     }
 
     @Override
-    protected void init() {
+    public void init() {
         JTextField host = new JTextField();
         host.setName("host");
         host.setText("localhost");

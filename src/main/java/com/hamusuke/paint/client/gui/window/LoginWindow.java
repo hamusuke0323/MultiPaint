@@ -17,7 +17,7 @@ public class LoginWindow extends Window {
     }
 
     @Override
-    protected void init() {
+    public void init() {
         this.passwordField = new JPasswordField();
         JButton login = new JButton("Login");
         login.setActionCommand("login");

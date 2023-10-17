@@ -121,6 +121,7 @@ public class PaintClient extends ReentrantThreadExecutor<Runnable> {
             this.currentWindow = new MenuWindow();
         }
 
+        this.currentWindow.init();
         this.currentWindow.setVisible(true);
     }
 

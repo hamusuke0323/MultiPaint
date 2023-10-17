@@ -56,7 +56,7 @@ public class CanvasWindow extends Window {
     }
 
     @Override
-    protected void init() {
+    public void init() {
         this.canvas = new CanvasComponent(client, client.getCurrentCanvas());
         GridBagLayout layout = new GridBagLayout();
         JPanel panel = new JPanel(layout);

@@ -2,6 +2,7 @@ package com.hamusuke.paint.client.network;
 
 import com.hamusuke.paint.client.PaintClient;
 import com.hamusuke.paint.client.gui.window.ConnectingWindow;
+import com.hamusuke.paint.client.gui.window.DisconnectWindow;
 import com.hamusuke.paint.client.gui.window.LoginWindow;
 import com.hamusuke.paint.client.network.main.ClientLobbyPacketListenerImpl;
 import com.hamusuke.paint.network.channel.Connection;
@@ -27,6 +28,7 @@ public class ClientLoginPacketListenerImpl implements ClientLoginPacketListener 
     private final Connection connection;
     private boolean waitingAuthComplete;
     private int ticks;
+    private String disconnectionMsg = "";
 
     public ClientLoginPacketListenerImpl(Connection connection, PaintClient client, Consumer<String> statusConsumer, Runnable onJoinLobby) {
         this.client = client;
@@ -75,6 +77,7 @@ public class ClientLoginPacketListenerImpl implements ClientLoginPacketListener 
 
     @Override
     public void onDisconnect(LoginDisconnectS2CPacket packet) {
+        this.disconnectionMsg = packet.getMsg();
         this.connection.disconnect();
     }
 
@@ -94,7 +97,7 @@ public class ClientLoginPacketListenerImpl implements ClientLoginPacketListener 
 
     @Override
     public void onDisconnected() {
-        this.client.setCurrentWindow(new ConnectingWindow());
+        this.client.setCurrentWindow(new DisconnectWindow(this.disconnectionMsg, ConnectingWindow::new));
     }
 
     @Override
